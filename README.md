@@ -1,7 +1,7 @@
 # Minesweeper
 
 A minesweeper game in C++ utilizing the SDL2 library.  
-_In development_
+**In development**  
 It will be gradually developed in order to create an AI solver
 of Minesweeper games.
 
@@ -12,5 +12,6 @@ Features to be added:
  * AI solver
 
 ### License
-The entire content of this repository is available under the MIT license
+Unless otherwise stated in the individual files,
+the entire content of this repository is available under the MIT license
 found in the LICENSE file.
