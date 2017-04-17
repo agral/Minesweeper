@@ -63,8 +63,6 @@ test: ${TEST_NAME}
 	@echo "Making tests..."
 
 ${TEST_NAME}: ${COMMON_OBJECTS} ${TEST_OBJECTS}
-	@echo "Making ${TEST_NAME}..."
-	@echo "${CXX} ${LDFLAGS} -o ${TEST_NAME} ${COMMON_OBJECTS} ${TEST_OBJECTS} ${LDLIBS}"
 	${CXX} ${LDFLAGS} -o ${TEST_NAME} ${COMMON_OBJECTS} ${TEST_OBJECTS} ${LDLIBS}
 
 print-%:
