@@ -4,7 +4,7 @@ CXXFLAGS= -g -c -Wall -Wextra -D_REENTRANT -I/usr/include/SDL2 --std=c++1z
 LDFLAGS=
 LDLIBS= -lSDL2 -lSDL2_image -lSDL2_ttf
 
-.PHONY: all clean clean_program clean_test dirs _dirs re run test
+.PHONY: all clean clean_program clean_test dirs _dirs re run test ut
 
 SRCDIR=src
 BINDIR=bin
@@ -34,7 +34,7 @@ PROGRAM_OBJECTS=${OBJDIR}/main.o ${COMMON_OBJECTS}
 TEST_SOURCES=$(shell find ${TESTDIR} -name "*.cc")
 TEST_OBJECTS=$(patsubst ${TESTDIR}/%.cc, ${TESTOBJDIR}/%.o, ${TEST_SOURCES})
 
-${PROGRAM_NAME}: ${PROGRAM_OBJECTS}
+${PROGRAM_NAME}: _dirs ${PROGRAM_OBJECTS}
 	${CXX} ${LDFLAGS} -o ${PROGRAM_NAME} ${PROGRAM_OBJECTS} ${LDLIBS}
 
 ${OBJDIR}/%.o: ${SRCDIR}/%.cc
@@ -53,7 +53,6 @@ clean_test:
 	${RM} ${TEST_OBJECTS}
 	${RM} ${TEST_NAME}
 
-
 re: clean all
 
 run: ${PROGRAM_NAME}
@@ -62,7 +61,10 @@ run: ${PROGRAM_NAME}
 test: ${TEST_NAME}
 	@echo "Making tests..."
 
-${TEST_NAME}: ${COMMON_OBJECTS} ${TEST_OBJECTS}
+ut: ${TEST_NAME}
+	@./${TEST_NAME}
+
+${TEST_NAME}: _dirs ${COMMON_OBJECTS} ${TEST_OBJECTS}
 	${CXX} ${LDFLAGS} -o ${TEST_NAME} ${COMMON_OBJECTS} ${TEST_OBJECTS} ${LDLIBS}
 
 print-%:
