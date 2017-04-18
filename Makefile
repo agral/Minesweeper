@@ -4,13 +4,15 @@ CXXFLAGS= -g -c -Wall -Wextra -D_REENTRANT -I/usr/include/SDL2 --std=c++1z
 LDFLAGS=
 LDLIBS= -lSDL2 -lSDL2_image -lSDL2_ttf
 
-.PHONY: all clean clean_program clean_test dirs _dirs re run test ut
+.PHONY: all clean clean_doc clean_program clean_test dirs _dirs doc re run \
+        test ut
 
 SRCDIR=src
 BINDIR=bin
 OBJDIR=${BINDIR}/obj
 TESTDIR=tests
 TESTOBJDIR=${OBJDIR}/tests
+DOCDIR=doc
 
 PROGRAM_NAME=Minesweeper
 TEST_NAME="TestMinesweeper"
@@ -27,6 +29,9 @@ _dirs:
 	@mkdir -p ${TESTOBJDIR}
 	@mkdir -p ${SRCDIR}
 
+doc:
+	@mkdir -p ${DOCDIR}
+	doxygen .doxyconfig
 
 COMMON_SOURCES=$(shell find ${SRCDIR} -name "*.cc" ! -name "main.cc")
 COMMON_OBJECTS=$(patsubst ${SRCDIR}/%.cc, ${OBJDIR}/%.o, ${COMMON_SOURCES})
@@ -43,7 +48,10 @@ ${OBJDIR}/%.o: ${SRCDIR}/%.cc
 ${TESTOBJDIR}/%.o: ${TESTDIR}/%.cc
 	${CXX} ${CXXFLAGS} $< -o $@
 
-clean: clean_program clean_test
+clean: clean_doc clean_program clean_test
+
+clean_doc:
+	${RM} -r ${DOCDIR}
 
 clean_program:
 	${RM} ${PROGRAM_OBJECTS}
