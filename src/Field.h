@@ -12,7 +12,7 @@ class Field
    * Generates a Field with FlagCode::Empty flag code
    * and with _isBomb and _isKnown flags set to false.
    *
-   * \post: Generated Field has:
+   * \post Generated Field has:
    *    - _flagCode set to FlagCode::Empty,
    *    - _isBomb and _isKnown set to false.
    */
