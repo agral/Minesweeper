@@ -3,6 +3,13 @@
 
 TEST_CASE("Field class tests", "[Field]")
 {
+  SECTION("Getter/Setter of _adjacentBombsCount works properly")
+  {
+    Field f;
+    f.setAdjacentBombsCount(3);
+    REQUIRE(3 == f.adjacentBombsCount());
+  }
+
   SECTION("Getter/Setter of _flagCode field works properly")
   {
     Field f;
@@ -37,11 +44,13 @@ TEST_CASE("Field class tests", "[Field]")
   {
     // The specs require that after Field construction the fields
     // are initialized to the following values:
+    const int expectedAdjacentBombsCount = 0;
     const FlagCode expectedFlagCode = FlagCode::Empty;
     const bool expectedIsBomb = false;
     const bool expectedIsKnown = false;
 
     Field f;
+    REQUIRE(f.adjacentBombsCount() == expectedAdjacentBombsCount);
     REQUIRE(f.flagCode() == expectedFlagCode);
     REQUIRE(f.isBomb() == expectedIsBomb);
     REQUIRE(f.isKnown() == expectedIsKnown);
@@ -50,16 +59,19 @@ TEST_CASE("Field class tests", "[Field]")
   SECTION("Calling clear() results in instance fields "
       "being set to proper values")
   {
+    const int expectedAdjacentBombsCount = 0;
     const FlagCode expectedFlagCode = FlagCode::Empty;
     const bool expectedIsBomb = false;
     const bool expectedIsKnown = false;
 
     Field f;
+    f.setAdjacentBombsCount(5);
     f.setFlagCode(FlagCode::Unknown);
     f.setIsBomb(!expectedIsBomb);
     f.setIsKnown(!expectedIsKnown);
 
     f.clear();
+    REQUIRE(f.adjacentBombsCount() == expectedAdjacentBombsCount);
     REQUIRE(f.flagCode() == expectedFlagCode);
     REQUIRE(f.isBomb() == expectedIsBomb);
     REQUIRE(f.isKnown() == expectedIsKnown);

@@ -1,11 +1,22 @@
 #include "Field.h"
 
 Field::Field() :
+  _adjacentBombsCount(0),
   _flagCode(FlagCode::Empty),
   _isBomb(false),
   _isKnown(false)
 {
   // All the work is done in the initializer.
+}
+
+int Field::adjacentBombsCount()
+{
+  return _adjacentBombsCount;
+}
+
+void Field::setAdjacentBombsCount(int adjacentBombsCount)
+{
+  _adjacentBombsCount = adjacentBombsCount;
 }
 
 FlagCode Field::flagCode()
@@ -40,6 +51,7 @@ void Field::setIsKnown(bool isKnown)
 
 void Field::clear()
 {
+  _adjacentBombsCount = 0;
   _flagCode = FlagCode::Empty;
   _isBomb = false;
   _isKnown = false;

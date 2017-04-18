@@ -13,10 +13,27 @@ class Field
    * and with _isBomb and _isKnown flags set to false.
    *
    * \post Generated Field has:
+   *    - _adjacentBombsCount set to 0,
    *    - _flagCode set to FlagCode::Empty,
    *    - _isBomb and _isKnown set to false.
    */
   Field();
+
+  /**
+   * Gets the value of _adjacentBombsCount field.
+   *
+   * \return value of _adjacentBombsCount field.
+   */
+  int adjacentBombsCount();
+
+  /**
+   * Sets the value of _adjacentBombsCount field.
+   *
+   * \param adjacentBombsCount new value of _adjacentBombsCount field.
+   * \post this Field instance has _adjacentBombsCount value
+   *     set to adjacentBombsCount.
+   */
+  void setAdjacentBombsCount(int adjacentBombsCount);
 
   /**
    * Gets the value of this Field instance's flag code.
@@ -64,12 +81,14 @@ class Field
    * Clears a Field so that it has the same state as after its initialization.
    *
    * \post This Field instance has:
+   *    - _adjacentBombsCount set to 0,
    *    - _flagCode set to FlagCode::Empty,
    *    - _isBomb and _isKnown set to false.
    */
   void clear();
 
  private:
+  int _adjacentBombsCount;
   FlagCode _flagCode;
   bool _isBomb;
   bool _isKnown;
