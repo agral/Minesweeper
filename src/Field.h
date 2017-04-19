@@ -1,6 +1,8 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+#include <string>
+
 enum class FlagCode
 {
   Empty = 0,
@@ -89,6 +91,13 @@ class Field
    *    - _isBomb and _isKnown set to false.
    */
   void clear();
+
+  /**
+   * Returns a textual representation of the Field instance.
+   *
+   * \return A string containing information about this Field instance.
+   */
+  std::string toString();
 
  private:
   int _adjacentBombsCount;

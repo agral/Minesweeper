@@ -76,4 +76,36 @@ TEST_CASE("Field class tests", "[Field]")
     REQUIRE(f.isBomb() == expectedIsBomb);
     REQUIRE(f.isKnown() == expectedIsKnown);
   }
+
+  SECTION("toString() method generates proper strings")
+  {
+    // Require that two fields with different parameters
+    // result in different strings:
+    Field a;
+    a.setAdjacentBombsCount(5);
+    a.setFlagCode(FlagCode::Unknown);
+    a.setIsBomb(true);
+    a.setIsKnown(false);
+    Field b;
+    b.setAdjacentBombsCount(3);
+    b.setFlagCode(FlagCode::Empty);
+    b.setIsBomb(false);
+    b.setIsKnown(true);
+    REQUIRE(a.toString() != b.toString());
+
+    // Require that two fields with the same parameters
+    // result in the same string:
+    Field c;
+    c.setAdjacentBombsCount(5);
+    c.setFlagCode(FlagCode::Unknown);
+    c.setIsBomb(true);
+    c.setIsKnown(false);
+    REQUIRE(a.toString() == c.toString());
+
+    // Require that a cleared field has the same textual representation
+    // as a fresh one:
+    Field d;
+    a.clear();
+    REQUIRE(a.toString() == d.toString());
+  }
 }
