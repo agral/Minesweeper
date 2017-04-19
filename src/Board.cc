@@ -1,45 +1,46 @@
 #include "Board.h"
-
+#include <random>
 #include <iostream>
-
-/// HELPER METHODS:
-void Board::clear()
-{
-  for(int h = 0; h < _height; ++h)
-  {
-    for (int w = 0; w < _width; ++w)
-    {
-      _fields[h][w].clear();
-    }
-  }
-
-  _totalMines = 0;
-  _totalNormalFields = (_width * _height);
-  _totalFields = _totalNormalFields;
-  _discoveredFields = 0;
-}
-
-/// End of helper methods.
 
 Board::Board(int width, int height) :
   _width(width),
-  _height(height),
-  _totalMines(0),
-  _totalNormalFields(width * height),
-  _totalFields(_totalNormalFields),
-  _discoveredFields(0)
+  _height(height)
 {
-  _fields.resize(height);
-  for(int y = 0; y < height; ++y)
-  {
-    _fields[y].resize(width);
-  }
-
-  // Clears the board, so that every field becomes undiscovered and empty:
-  clear();
+  // Not implemented.
 }
 
-void Board::newGame(int totalMines)
+std::string Board::peekAtField(int x, int y)
 {
-  std::cout << "NewGame(" << totalMines << ")" << std::endl;
+  // Not implemented.
+  return "Not implemented";
+}
+
+int Board::width()
+{
+  return _width;
+}
+
+int Board::height()
+{
+  return _height;
+}
+
+std::string peekAtField(int x, int y)
+{
+  // @TODO implement me.
+}
+
+void Board::fillRandomly(int totalMines)
+{
+  std::mt19937 rng;
+  rng.seed(std::random_device()());
+  std::uniform_int_distribution<int> randx(0, _width - 1);
+  std::uniform_int_distribution<int> randy(0, _height - 1);
+
+  for(int b = 0; b < totalMines; ++b)
+  {
+    int x = randx(rng);
+    int y = randy(rng);
+    std::cout << "(" << x << ", " << y << ")" << std::endl;
+  }
 }

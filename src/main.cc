@@ -5,9 +5,9 @@
 int main()
 {
   Board b(10, 10);
+  b.fillRandomly(10);
+
+
   std::cout << "main executed" << std::endl;
-
-  std::cout << "Will now quit." << std::endl;
-
   return 0;
 }
