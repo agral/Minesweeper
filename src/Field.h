@@ -1,3 +1,6 @@
+#ifndef FIELD_H
+#define FIELD_H
+
 enum class FlagCode
 {
   Empty = 0,
@@ -93,3 +96,5 @@ class Field
   bool _isBomb;
   bool _isKnown;
 };
+
+#endif // FIELD_H
