@@ -4,7 +4,11 @@ CXXFLAGS= -g -c -Wall -Wextra -D_REENTRANT -I/usr/include/SDL2 --std=c++1z
 LDFLAGS=
 LDLIBS= -lSDL2 -lSDL2_image -lSDL2_ttf
 
-.PHONY: all clean clean_doc clean_program clean_test dirs _dirs doc re run \
+.PHONY: all \
+        clean clean_doc clean_program clean_test \
+        doc \
+        re \
+        run \
         test ut
 
 SRCDIR=src
@@ -15,23 +19,7 @@ TESTOBJDIR=${OBJDIR}/tests
 DOCDIR=doc
 
 PROGRAM_NAME=Minesweeper
-TEST_NAME="TestMinesweeper"
-
-
-all: ${PROGRAM_NAME}
-
-dirs: _dirs
-	@echo "Directory structure has been created."
-
-_dirs:
-	@mkdir -p ${BINDIR}
-	@mkdir -p ${OBJDIR}
-	@mkdir -p ${TESTOBJDIR}
-	@mkdir -p ${SRCDIR}
-
-doc:
-	@mkdir -p ${DOCDIR}
-	doxygen .doxyconfig
+TEST_NAME=TestMinesweeper
 
 COMMON_SOURCES=$(shell find ${SRCDIR} -name "*.cc" ! -name "main.cc")
 COMMON_OBJECTS=$(patsubst ${SRCDIR}/%.cc, ${OBJDIR}/%.o, ${COMMON_SOURCES})
@@ -39,16 +27,28 @@ PROGRAM_OBJECTS=${OBJDIR}/main.o ${COMMON_OBJECTS}
 TEST_SOURCES=$(shell find ${TESTDIR} -name "*.cc")
 TEST_OBJECTS=$(patsubst ${TESTDIR}/%.cc, ${TESTOBJDIR}/%.o, ${TEST_SOURCES})
 
-${PROGRAM_NAME}: _dirs ${PROGRAM_OBJECTS}
+${PROGRAM_NAME}: ${PROGRAM_OBJECTS}
 	${CXX} ${LDFLAGS} -o ${PROGRAM_NAME} ${PROGRAM_OBJECTS} ${LDLIBS}
 
+all: ${PROGRAM_NAME} ${TEST_NAME} doc
+
+doc:
+	@mkdir -p ${DOCDIR}
+	doxygen .doxyconfig
+
+
 ${OBJDIR}/%.o: ${SRCDIR}/%.cc
+	@mkdir -p $(dir $@)
 	${CXX} ${CXXFLAGS} $< -o $@
 
 ${TESTOBJDIR}/%.o: ${TESTDIR}/%.cc
+	@mkdir -p $(dir $@)
 	${CXX} ${CXXFLAGS} $< -o $@
 
-clean: clean_doc clean_program clean_test
+clean: clean_doc
+	${RM} -r ${BINDIR}
+	${RM} ${PROGRAM_NAME}
+	${RM} ${TEST_NAME}
 
 clean_doc:
 	${RM} -r ${DOCDIR}
@@ -72,7 +72,7 @@ test: ${TEST_NAME}
 ut: ${TEST_NAME}
 	@./${TEST_NAME}
 
-${TEST_NAME}: _dirs ${COMMON_OBJECTS} ${TEST_OBJECTS}
+${TEST_NAME}: ${COMMON_OBJECTS} ${TEST_OBJECTS}
 	${CXX} ${LDFLAGS} -o ${TEST_NAME} ${COMMON_OBJECTS} ${TEST_OBJECTS} ${LDLIBS}
 
 print-%:
