@@ -1,13 +1,29 @@
-#include <iostream>
+#include <cstdio>
 
 #include "Board.h"
+#include "AGE/Engine.h"
 
 int main()
 {
-  Board b(10, 10);
-  b.fillRandomly(10);
+  AGE::Engine engine;
 
+  printf("Initializing...\n");
+  if (!engine.init())
+  {
+    printf("Advanced Game Engine failed to initialize. Exiting.\n");
+    exit(1);
+  }
 
-  std::cout << "main executed" << std::endl;
+  printf("Initialization complete.\nLoading the media...\n");
+  if (!engine.loadMedia())
+  {
+    printf("Warning: some media files failed to load!\n");
+  }
+  printf("Media loded.\n");
+
+  engine.startLoop();
+
+  // Destroys the window and quits the SDL system:
+  engine.close();
   return 0;
 }
