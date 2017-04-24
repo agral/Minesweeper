@@ -17,10 +17,12 @@ Engine::Engine() :
   // All the work is done in the initialization block.
 }
 
+
 Engine::~Engine()
 {
   close();
 }
+
 
 bool Engine::init()
 {
@@ -67,6 +69,7 @@ bool Engine::init()
   return successFlag;
 }
 
+
 bool Engine::loadMedia()
 {
   bool successFlag = true;
@@ -75,6 +78,28 @@ bool Engine::loadMedia()
 
   return successFlag;
 }
+
+
+void Engine::startLoop()
+{
+  SDL_Event sdlEvent;
+  bool quitFlag = false;
+  while (!quitFlag)
+  {
+    while (0 != SDL_PollEvent(&sdlEvent))
+    {
+      // Case: user quits the application:
+      if (SDL_QUIT == sdlEvent.type)
+      {
+        quitFlag = true;
+      }
+
+      SDL_BlitSurface(msTilesSurface, 0, screenSurface, 0);
+      SDL_UpdateWindowSurface(window);
+    }
+  }
+}
+
 
 void Engine::close()
 {

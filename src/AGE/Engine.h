@@ -10,9 +10,10 @@ class Engine
   Engine();
   ~Engine();
 
-  void start();
   bool init();
   bool loadMedia();
+
+  void startLoop();
   void close();
 
  private:
