@@ -94,6 +94,25 @@ void Engine::startLoop()
         quitFlag = true;
       }
 
+      // Case: user clicks with a mouse:
+      else if (SDL_MOUSEBUTTONDOWN == sdlEvent.type)
+      {
+        int x, y;
+        Uint32 buttonState = SDL_GetMouseState(&x, &y);
+
+        // Left mouse button:
+        if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
+        {
+          printf("LMB(%03d, %03d)\n", x, y);
+        }
+
+        // Right mouse button:
+        else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
+        {
+          printf("RMB(%03d, %03d)\n", x, y);
+        }
+      }
+
       SDL_BlitSurface(msTilesSurface, 0, screenSurface, 0);
       SDL_UpdateWindowSurface(window);
     }
