@@ -1,6 +1,8 @@
 #ifndef AGE_ENGINE_H
 #define AGE_ENGINE_H
 
+#include "../Board.h"
+
 namespace AGE
 {
 
@@ -19,7 +21,8 @@ class Engine
  private:
   bool _isInitialized;
   bool _isClosed;
-  /* code */
+
+  Board _board;
 };
 
 

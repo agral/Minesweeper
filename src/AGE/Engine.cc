@@ -12,9 +12,10 @@ namespace AGE
 
 Engine::Engine() :
   _isInitialized(false),
-  _isClosed(false)
+  _isClosed(false),
+  _board(10, 10)
 {
-  // All the work is done in the initialization block.
+  _board.newGame(10);
 }
 
 
@@ -110,6 +111,7 @@ void Engine::startLoop()
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
         {
           printf("RMB(%03d, %03d)\n", x, y);
+          _board.print();
         }
       }
 

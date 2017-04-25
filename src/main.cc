@@ -1,6 +1,5 @@
 #include <cstdio>
 
-#include "Board.h"
 #include "AGE/Engine.h"
 
 int main()
