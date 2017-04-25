@@ -39,20 +39,50 @@ class Board
   std::string peekAtField(int x, int y);
 
   /**
-   * Fills the board randomly with a totalMines mines.
+   * Clears the board by converting each field to a clear one.
    *
-   * In order to do this, the board is cleared first by calling clear(),
-   * then the total of totalMines mines are placed at distinct random positions
-   * on the board. Finally all the fields' _adjacentBombsCount parameter
-   * gets updated.
+   * \post Every Field on the board has been cleared.
+   * Please refer to the Field class documentation for more info.
+   */
+  void clear();
+
+  /**
+   * Updates the "adjacent bombs count" for every field in the board.
+   *
+   * \post Every Field on the board has the _adjacentBombsCount field
+   * set to a correct value.
+   */
+  void calculateAdjacentBombCounts();
+
+  /**
+   * Adds mines at random unocuppied locations on the board.
    *
    * \param totalMines the total number of mines to be distributed at distinct
    * random positions on the board.
    *
    * \pre totalMines is in range: 0 < totalMines < (_width * _height).
-   * \post The board has totalMines mines placed at random distinct locations.
+   * \post The board has totalMines mines placed at random distinct locations,
+   * which did not already contain a bomb.
    */
-  void fillRandomly(int totalMines);
+  void addMines(int mines);
+
+  /**
+   * Starts a new minesweeper game.
+   *
+   * The following steps are taken in order to start a new game:
+   * - The board is cleared by calling the clear() subroutine
+   * - A total of totalMines are put at distinct random locations on the board
+   * - For each Field the total number of adjacent fields contaning the bombs
+   *   is calculated and the result stored in appropriate field
+   *
+   * \param totalMines The total number of mines to be put on the board.
+   * \post The new game has started, as described in detail above.
+   */
+  void newGame(int totalMines);
+
+  // Helper functions:
+  void print();
+
 
  private:
   int _width;
