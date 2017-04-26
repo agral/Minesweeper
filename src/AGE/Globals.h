@@ -37,6 +37,11 @@ extern SDL_Surface *screenSurface;
  */
 extern SDL_Surface *msTilesSurface;
 
+
+extern const int TILE_SIZE;
+
+extern const SDL_Rect clipNeighbors[];
+
 } // namespace AGE
 
 #endif // AGE_GLOBALS_H
