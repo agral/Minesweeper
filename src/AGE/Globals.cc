@@ -9,7 +9,7 @@ SDL_Window *window = nullptr;
 SDL_Surface *screenSurface = nullptr;
 SDL_Surface *msTilesSurface = nullptr;
 
-const int TILE_SIZE = 13; //px;
+const int TILE_SIZE = 14; //px;
 
 extern const SDL_Rect clipNeighbors[9] = {
   {0, TILE_SIZE, TILE_SIZE, TILE_SIZE},
