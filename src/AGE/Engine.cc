@@ -101,16 +101,18 @@ void Engine::startLoop()
         int x, y;
         Uint32 buttonState = SDL_GetMouseState(&x, &y);
 
+        int tileX = x / TILE_SIZE;
+        int tileY = y / TILE_SIZE;
+        printf("Tile: (%02d, %02d)\n", tileX, tileY);
+
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
-          printf("LMB(%03d, %03d)\n", x, y);
         }
 
         // Right mouse button:
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
         {
-          printf("RMB(%03d, %03d)\n", x, y);
           _board.print();
         }
       }
@@ -136,6 +138,18 @@ void Engine::close()
     SDL_Quit();
 
     _isClosed = true;
+  }
+}
+
+// private methods:
+
+void Engine::draw()
+{
+  for (int y = 0; y < _board.height(); ++y)
+  {
+    for (int x = 0; x < _board.width(); ++x)
+    {
+    }
   }
 }
 

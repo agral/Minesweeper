@@ -19,6 +19,9 @@ class Engine
   void close();
 
  private:
+  void draw();
+
+ private:
   bool _isInitialized;
   bool _isClosed;
 
