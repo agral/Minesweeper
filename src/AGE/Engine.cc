@@ -1,7 +1,6 @@
 #include "Engine.h"
 
 #include "Globals.h"
-#include "SdlFunctions.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
