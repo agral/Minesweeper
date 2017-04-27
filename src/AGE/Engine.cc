@@ -93,7 +93,7 @@ bool Engine::loadMedia()
 {
   bool successFlag = true;
 
-  msTilesSurface = loadSurface("./Graphics/Tiles.png", true);
+  boardSprite.loadFromFile("./Graphics/Tiles.png", renderer);
 
   return successFlag;
 }
@@ -107,6 +107,8 @@ void Engine::startLoop()
   {
     while (0 != SDL_PollEvent(&sdlEvent))
     {
+      // --- Processes user's input: ---
+
       // Case: user quits the application:
       if (SDL_QUIT == sdlEvent.type)
       {
@@ -135,8 +137,8 @@ void Engine::startLoop()
         }
       }
 
-      SDL_BlitSurface(msTilesSurface, 0, screenSurface, 0);
-      SDL_UpdateWindowSurface(window);
+      // --- Redraws the board: ---
+      draw();
     }
   }
 }
@@ -146,8 +148,7 @@ void Engine::close()
 {
   if (!_isClosed)
   {
-    SDL_FreeSurface(msTilesSurface);
-    msTilesSurface = nullptr;
+    boardSprite.free();
 
     SDL_DestroyRenderer(renderer);
     renderer = nullptr;
@@ -165,12 +166,28 @@ void Engine::close()
 
 void Engine::draw()
 {
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_RenderClear(renderer);
+
   for (int y = 0; y < _board.height(); ++y)
   {
     for (int x = 0; x < _board.width(); ++x)
     {
+      Field f = _board.peekAt(y, x);
+      if (f.isBomb())
+      {
+        boardSprite.render(TILE_SIZE * y, TILE_SIZE * x, &clipBombNormal);
+      }
+      else
+      {
+        int n = f.adjacentBombsCount();
+        boardSprite.render(TILE_SIZE * y, TILE_SIZE * x, &clipNeighbors[n]);
+      }
     }
   }
+
+  boardSprite.render(400, 400);
+  SDL_RenderPresent(renderer);
 }
 
 } // namespace AGE

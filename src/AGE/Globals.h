@@ -1,6 +1,8 @@
 #ifndef AGE_GLOBALS_H
 #define AGE_GLOBALS_H
 
+#include "Sprite.h"
+
 #include <SDL.h>
 
 namespace AGE
@@ -40,12 +42,18 @@ extern SDL_Surface *screenSurface;
 /**
  * The surface containing minesweeper tiles:
  */
-extern SDL_Surface *msTilesSurface;
+extern Sprite boardSprite;
 
 
 extern const int TILE_SIZE;
 
-extern const SDL_Rect clipNeighbors[];
+extern SDL_Rect clipNeighbors[];
+
+extern SDL_Rect clipFieldUnknown;
+extern SDL_Rect clipRedFlag;
+extern SDL_Rect clipQuestionMark;
+extern SDL_Rect clipBombNormal;
+extern SDL_Rect clipBombExploded;
 
 } // namespace AGE
 
