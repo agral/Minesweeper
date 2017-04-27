@@ -52,7 +52,7 @@ class Board
    * \post Every Field on the board has the _adjacentBombsCount field
    * set to a correct value.
    */
-  void calculateAdjacentBombCounts();
+  void calculateAdjacentBombsCount();
 
   /**
    * Adds mines at random unocuppied locations on the board.

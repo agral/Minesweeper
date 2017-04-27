@@ -39,7 +39,7 @@ void Board::clear()
   }
 }
 
-void Board::calculateAdjacentBombCounts()
+void Board::calculateAdjacentBombsCount()
 {
   for(int h = 0; h < _height; ++h)
   {
@@ -104,7 +104,7 @@ void Board::newGame(int totalMines)
 {
   clear();
   addMines(totalMines);
-  calculateAdjacentBombCounts();
+  calculateAdjacentBombsCount();
 }
 
 void Board::print()
