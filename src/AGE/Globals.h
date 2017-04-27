@@ -28,6 +28,11 @@ extern int screenHeight;
 extern SDL_Window *window;
 
 /**
+ * The window renderer.
+ */
+extern SDL_Renderer *renderer;
+
+/**
  * The surface contained by the window.
  */
 extern SDL_Surface *screenSurface;

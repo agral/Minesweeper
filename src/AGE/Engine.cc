@@ -37,7 +37,12 @@ bool Engine::init()
     }
     else
     {
-      // extern SDL_Window *window;
+      // Sets linear texture filtering:
+      if (!SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+      {
+        printf("Warning: Could not enable linear texture filtering.\n");
+      }
+
       window = SDL_CreateWindow(
           windowTitle,
           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -51,16 +56,29 @@ bool Engine::init()
       }
       else
       {
-        int imgFlags = IMG_INIT_PNG;
-        if (!(IMG_Init(imgFlags) & imgFlags))
+        renderer = SDL_CreateRenderer(window, -1,
+            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        if (nullptr == renderer)
         {
-          printf("SDL_Image module could not initialize.\n");
-          printf("SDL_image error: %s\n", IMG_GetError());
+          printf("Could not create a vsynced renderer.\n");
+          printf("SDL error: %s\n", SDL_GetError());
           successFlag = false;
         }
         else
         {
-          screenSurface = SDL_GetWindowSurface(window);
+          SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+
+          int imgFlags = IMG_INIT_PNG;
+          if (!(IMG_Init(imgFlags) & imgFlags))
+          {
+            printf("SDL_Image module could not initialize.\n");
+            printf("SDL_image error: %s\n", IMG_GetError());
+            successFlag = false;
+          }
+          else
+          {
+            screenSurface = SDL_GetWindowSurface(window);
+          }
         }
       }
     }
@@ -131,6 +149,8 @@ void Engine::close()
     SDL_FreeSurface(msTilesSurface);
     msTilesSurface = nullptr;
 
+    SDL_DestroyRenderer(renderer);
+    renderer = nullptr;
     SDL_DestroyWindow(window);
     window = nullptr;
 
