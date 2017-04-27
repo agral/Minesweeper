@@ -127,6 +127,7 @@ void Engine::startLoop()
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
+          _board.discover(tileX, tileY);
         }
 
         // Right mouse button:

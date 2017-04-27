@@ -4,7 +4,8 @@
 
 Board::Board(int width, int height) :
   _width(width),
-  _height(height)
+  _height(height),
+  _state(GameState::FRESH)
 {
   _map.resize(height);
   for(int h = 0; h < height; ++h)
@@ -37,6 +38,8 @@ void Board::clear()
       _map[h][w].clear();
     }
   }
+
+  _state = GameState::FRESH;
 }
 
 void Board::calculateAdjacentBombsCount()
@@ -75,6 +78,28 @@ void Board::calculateAdjacentBombsCount()
   }
 }
 
+void Board::discover(int x, int y)
+{
+  if (!((_state == GameState::FRESH) || (_state == GameState::IN_PROGRESS)))
+  {
+    // Does not discover fields if the game has ended.
+    return;
+  }
+
+  if (_map[y][x].isKnown())
+  {
+    // Does nothing if a field is known (discovered) already:
+    return;
+  }
+  printf("Discover: x=%d, y=%d\n", x, y);
+
+  if (_map[y][x].isBomb())
+  {
+    printf("GAME OVER\n");
+    _state = GameState::LOST;
+  }
+}
+
 void Board::addMines(int totalMines)
 {
   std::cout << "Adding " << totalMines << " mines." << std::endl;
@@ -105,6 +130,11 @@ void Board::newGame(int totalMines)
   clear();
   addMines(totalMines);
   calculateAdjacentBombsCount();
+}
+
+GameState Board::state()
+{
+  return _state;
 }
 
 void Board::print()

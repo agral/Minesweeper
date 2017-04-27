@@ -2,6 +2,8 @@
 #define BOARD_H
 
 #include "Field.h"
+#include "GameState.h"
+
 #include <vector>
 #include <string>
 
@@ -55,6 +57,18 @@ class Board
   void calculateAdjacentBombsCount();
 
   /**
+   * Discovers a Field.
+   *
+   * If the discovered field contains a bomb, the game is lost.
+   * If the discovered field is empty, the total number of mines in adjacent
+   * cells is revealed.
+   *
+   * \pre: The game is in the active state.
+   * \post: The field is revealed and the game state is updated accordingly.
+   */
+  void discover(int x, int y);
+
+  /**
    * Adds mines at random unocuppied locations on the board.
    *
    * \param totalMines the total number of mines to be distributed at distinct
@@ -80,6 +94,11 @@ class Board
    */
   void newGame(int totalMines);
 
+  /**
+   * Returns current state of the game.
+   */
+  GameState state();
+
   // Helper functions:
   void print();
 
@@ -88,8 +107,7 @@ class Board
   int _width;
   int _height;
   std::vector< std::vector< Field > > _map;
+  GameState _state;
 };
-
-
 
 #endif // BOARD_H
