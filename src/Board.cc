@@ -13,10 +13,9 @@ Board::Board(int width, int height) :
   }
 }
 
-std::string Board::peekAtField(int x, int y)
+Field Board::peekAt(int x, int y)
 {
-  // Not implemented.
-  return "Not implemented";
+  return _map[y][x];
 }
 
 int Board::width()

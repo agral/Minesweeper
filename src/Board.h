@@ -36,7 +36,7 @@ class Board
    */
   int height();
 
-  std::string peekAtField(int x, int y);
+  Field peekAt(int x, int y);
 
   /**
    * Clears the board by converting each field to a clear one.
