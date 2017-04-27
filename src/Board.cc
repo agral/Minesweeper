@@ -92,9 +92,9 @@ void Board::addMines(int totalMines)
   {
     int x = randx(rng);
     int y = randy(rng);
-    if (!_map[x][y].isBomb())
+    if (!_map[y][x].isBomb())
     {
-      _map[x][y].setIsBomb(true);
+      _map[y][x].setIsBomb(true);
       minesPlaced += 1;
     }
   }

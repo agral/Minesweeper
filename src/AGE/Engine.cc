@@ -13,9 +13,9 @@ namespace AGE
 Engine::Engine() :
   _isInitialized(false),
   _isClosed(false),
-  _board(10, 10)
+  _board(10, 15)
 {
-  _board.newGame(10);
+  _board.newGame(60);
 }
 
 
@@ -173,15 +173,15 @@ void Engine::draw()
   {
     for (int x = 0; x < _board.width(); ++x)
     {
-      Field f = _board.peekAt(y, x);
+      Field f = _board.peekAt(x, y);
       if (f.isBomb())
       {
-        boardSprite.render(TILE_SIZE * y, TILE_SIZE * x, &clipBombNormal);
+        boardSprite.render(TILE_SIZE * x, TILE_SIZE * y, &clipBombNormal);
       }
       else
       {
         int n = f.adjacentBombsCount();
-        boardSprite.render(TILE_SIZE * y, TILE_SIZE * x, &clipNeighbors[n]);
+        boardSprite.render(TILE_SIZE * x, TILE_SIZE * y, &clipNeighbors[n]);
       }
     }
   }
