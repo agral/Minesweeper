@@ -115,6 +115,62 @@ void Board::discover(int y, int x)
     printf("GAME OVER\n");
     _state = GameState::LOST;
   }
+  else
+  {
+    _map[y][x].setIsKnown(true);
+
+    // Discovers neighbors automatically if adjacentBombsCount is zero:
+    if (0 == _map[y][x].adjacentBombsCount())
+    {
+      // Automatically discovers top-left neighbor:
+      if ((y > 0) && (x > 0) && (!_map[y-1][x-1].isKnown()))
+      {
+        discover(y-1, x-1);
+      }
+
+      // Automatically discovers top neighbor:
+      if ((y > 0) && (!_map[y-1][x].isKnown()))
+      {
+        discover(y-1, x);
+      }
+
+      // Automatically discovers top-right neighbor:
+      if ((y > 0) && (x < _width-1) && (!_map[y-1][x+1].isKnown()))
+      {
+        discover(y-1, x+1);
+      }
+
+      // Automatically discovers left neighbor:
+      if ((x > 0) && (!_map[y][x-1].isKnown()))
+      {
+        discover(y, x-1);
+      }
+
+      // Automatically discovers right neighbor:
+      if ((x < _width-1) && (!_map[y][x+1].isKnown()))
+      {
+        discover(y, x+1);
+      }
+
+      // Automatically discovers bottom-left neighbor:
+      if ((y < _height-1) && (x > 0) && (!_map[y+1][x-1].isKnown()))
+      {
+        discover(y+1, x-1);
+      }
+
+      // Automatically discovers bottom neighbor:
+      if ((y < _height-1) && (!_map[y+1][x].isKnown()))
+      {
+        discover(y+1, x);
+      }
+
+      // Automatically discovers bottom-right neighbor:
+      if ((y < _height-1) && (x < _width-1) && (!_map[y+1][x+1].isKnown()))
+      {
+        discover(y+1, x+1);
+      }
+    }
+  }
 }
 
 void Board::addMines(int totalMines)

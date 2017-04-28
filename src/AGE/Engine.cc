@@ -176,22 +176,45 @@ void Engine::draw()
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
 
-  for (int y = 0; y < _board.height(); ++y)
+  // Draws only known fields (while the game is still in progress)
+  if ((_board.state() == GameState::FRESH) ||
+      (_board.state() == GameState::IN_PROGRESS))
   {
-    for (int x = 0; x < _board.width(); ++x)
+    for (int y = 0; y < _board.height(); ++y)
     {
-      Field f = _board.peekAt(y, x);
-      if (f.isBomb())
+      int posY = TILE_SIZE * y;
+      for (int x = 0; x < _board.width(); ++x)
       {
-        boardSprite.render(TILE_SIZE * x, TILE_SIZE * y, &clipBombNormal);
-      }
-      else
-      {
-        int n = f.adjacentBombsCount();
-        boardSprite.render(TILE_SIZE * x, TILE_SIZE * y, &clipNeighbors[n]);
+        int posX = TILE_SIZE * x;
+        Field f = _board.peekAt(y, x);
+        if (f.isKnown())
+        {
+          if (f.isBomb())
+          {
+            boardSprite.render(posX, posY, &clipBombNormal);
+          }
+          else if (FlagCode::Mine == f.flagCode())
+          {
+            boardSprite.render(posX, posY, &clipRedFlag);
+          }
+          else if (FlagCode::Unknown == f.flagCode())
+          {
+            boardSprite.render(posX, posY, &clipQuestionMark);
+          }
+          else
+          {
+            int n = f.adjacentBombsCount();
+            boardSprite.render(posX, posY, &clipNeighbors[n]);
+          }
+        }
+        else
+        {
+          boardSprite.render(posX, posY, &clipFieldUnknown);
+        }
       }
     }
   }
+
 
   SDL_RenderPresent(renderer);
 }
