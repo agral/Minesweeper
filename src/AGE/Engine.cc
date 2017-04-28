@@ -215,6 +215,29 @@ void Engine::draw()
     }
   }
 
+  else if ((_board.state() == GameState::LOST) ||
+           (_board.state() == GameState::WON))
+  {
+    for (int y = 0; y < _board.height(); ++y)
+    {
+      int posY = TILE_SIZE * y;
+      for (int x = 0; x < _board.width(); ++x)
+      {
+        int posX = TILE_SIZE * x;
+        Field f = _board.peekAt(y, x);
+
+        if (f.isBomb())
+        {
+          boardSprite.render(posX, posY, &clipBombNormal);
+        }
+        else // f has to be a normal field
+        {
+          int n = f.adjacentBombsCount();
+          boardSprite.render(posX, posY, &clipNeighbors[n]);
+        }
+      }
+    }
+  }
 
   SDL_RenderPresent(renderer);
 }
