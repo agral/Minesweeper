@@ -12,9 +12,9 @@ namespace AGE
 Engine::Engine() :
   _isInitialized(false),
   _isClosed(false),
-  _board(10, 15)
+  _board(startingBoardWidth, startingBoardHeight)
 {
-  _board.newGame(60);
+  _board.newGame(startingTotalMines);
 }
 
 
@@ -127,13 +127,22 @@ void Engine::startLoop()
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
+          printf("[Mouse] Left button pressed.\n");
           _board.discover(tileX, tileY);
         }
 
         // Right mouse button:
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
         {
+          printf("[Mouse] Right button pressed.\n");
           _board.print();
+        }
+
+        // Middle mouse button:
+        else if (buttonState & SDL_BUTTON(SDL_BUTTON_MIDDLE))
+        {
+          printf("[Mouse] Middle button pressed.\n");
+          _board.newGame(_board.totalMines());
         }
       }
 
