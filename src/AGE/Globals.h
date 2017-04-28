@@ -23,6 +23,21 @@ extern int screenWidth;
  */
 extern int screenHeight;
 
+/**
+ * The default width of the minefield, in Fields.
+ */
+extern const int startingBoardWidth;
+
+/**
+ * The default height of the minefield, in Fields.
+ */
+extern const int startingBoardHeight;
+
+/**
+ * The default total mines count on the minefield.
+ */
+extern const int startingTotalMines;
+
 
 /**
  * The window that everything will be rendered on.

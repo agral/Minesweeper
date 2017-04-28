@@ -5,6 +5,11 @@ namespace AGE
 
 int screenWidth = 800;
 int screenHeight = 600;
+
+const int startingBoardWidth = 20;
+const int startingBoardHeight = 10;
+const int startingTotalMines = 25;
+
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 SDL_Surface *screenSurface = nullptr;
