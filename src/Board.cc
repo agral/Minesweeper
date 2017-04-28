@@ -209,6 +209,12 @@ void Board::newGame(int totalMines)
 
 void Board::cycleFlag(int y, int x)
 {
+  if (_map[y][x].isKnown())
+  {
+    // Does not allow putting flags on the fields that are already known:
+    return;
+  }
+
   FlagCode fc = _map[y][x].flagCode();
   switch (fc)
   {

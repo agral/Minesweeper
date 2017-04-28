@@ -113,6 +113,8 @@ class Board
    *     FlagCode::Empty --> FlagCode::Mine --> FlagCode::Unknown
    *     --> FlagCode::Empty
    *
+   * \pre The specified Field has the _isKnown flag set to false.
+   *
    * \post The specified Field has the following FlagCode:
    *     * FlagCode::Mine if it had FlagCode::Empty so far,
    *     * FlagCode::Unknown if it had FlagCode::Mine so far,
