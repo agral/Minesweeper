@@ -12,7 +12,7 @@ namespace AGE
 Engine::Engine() :
   _isInitialized(false),
   _isClosed(false),
-  _board(startingBoardWidth, startingBoardHeight)
+  _board(startingBoardHeight, startingBoardWidth)
 {
   _board.newGame(startingTotalMines);
 }
@@ -65,8 +65,6 @@ bool Engine::init()
         }
         else
         {
-          SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
-
           int imgFlags = IMG_INIT_PNG;
           if (!(IMG_Init(imgFlags) & imgFlags))
           {
@@ -122,13 +120,13 @@ void Engine::startLoop()
 
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
-        printf("Tile: (%02d, %02d)\n", tileX, tileY);
+        printf("Tile: (y=%d, x=%d)\n", tileY, tileX);
 
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
           printf("[Mouse] Left button pressed.\n");
-          _board.discover(tileX, tileY);
+          _board.discover(tileY, tileX);
         }
 
         // Right mouse button:
@@ -182,7 +180,7 @@ void Engine::draw()
   {
     for (int x = 0; x < _board.width(); ++x)
     {
-      Field f = _board.peekAt(x, y);
+      Field f = _board.peekAt(y, x);
       if (f.isBomb())
       {
         boardSprite.render(TILE_SIZE * x, TILE_SIZE * y, &clipBombNormal);
@@ -195,7 +193,6 @@ void Engine::draw()
     }
   }
 
-  boardSprite.render(400, 400);
   SDL_RenderPresent(renderer);
 }
 

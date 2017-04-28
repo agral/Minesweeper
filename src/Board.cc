@@ -2,9 +2,9 @@
 #include <random>
 #include <iostream>
 
-Board::Board(int width, int height) :
-  _width(width),
+Board::Board(int height, int width) :
   _height(height),
+  _width(width),
   _state(GameState::FRESH)
 {
   _map.resize(height);
@@ -14,7 +14,7 @@ Board::Board(int width, int height) :
   }
 }
 
-Field Board::peekAt(int x, int y)
+Field Board::peekAt(int y, int x)
 {
   return _map[y][x];
 }
@@ -83,7 +83,7 @@ void Board::calculateAdjacentBombsCount()
   }
 }
 
-void Board::discover(int x, int y)
+void Board::discover(int y, int x)
 {
   if (!((_state == GameState::FRESH) || (_state == GameState::IN_PROGRESS)))
   {
@@ -96,7 +96,7 @@ void Board::discover(int x, int y)
     // Does nothing if a field is known (discovered) already:
     return;
   }
-  printf("Discover: x=%d, y=%d\n", x, y);
+  printf("[Board] Discover: y=%d, x=%d\n", y, x);
 
   if (_map[y][x].isBomb())
   {
@@ -110,8 +110,8 @@ void Board::addMines(int totalMines)
   std::cout << "Adding " << totalMines << " mines." << std::endl;
   std::mt19937 rng;
   rng.seed(std::random_device()());
-  std::uniform_int_distribution<int> randx(0, _width - 1);
   std::uniform_int_distribution<int> randy(0, _height - 1);
+  std::uniform_int_distribution<int> randx(0, _width - 1);
 
   // Crops the totalMines in range: <1, (_width * _height)-1>:
   totalMines = std::max(totalMines, 1);
@@ -120,8 +120,8 @@ void Board::addMines(int totalMines)
   int minesPlaced = 0;
   while (minesPlaced < totalMines)
   {
-    int x = randx(rng);
     int y = randy(rng);
+    int x = randx(rng);
     if (!_map[y][x].isBomb())
     {
       _map[y][x].setIsBomb(true);

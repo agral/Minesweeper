@@ -21,7 +21,7 @@ class Board
    * and every Field constituting the board is in clear state
    * (see the Field documentation for more info).
    */
-  Board(int width, int height);
+  Board(int height, int width);
 
  public:
   /**
@@ -47,7 +47,7 @@ class Board
   int totalMines();
 
 
-  Field peekAt(int x, int y);
+  Field peekAt(int y, int x);
 
   /**
    * Clears the board by converting each field to a clear one.
@@ -75,7 +75,7 @@ class Board
    * \pre: The game is in the active state.
    * \post: The field is revealed and the game state is updated accordingly.
    */
-  void discover(int x, int y);
+  void discover(int y, int x);
 
   /**
    * Adds mines at random unocuppied locations on the board.
@@ -113,8 +113,8 @@ class Board
 
 
  private:
-  int _width;
   int _height;
+  int _width;
   int _totalMines;
   std::vector< std::vector< Field > > _map;
   GameState _state;
