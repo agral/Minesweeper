@@ -29,6 +29,11 @@ int Board::height()
   return _height;
 }
 
+int Board::totalMines()
+{
+  return _totalMines;
+}
+
 void Board::clear()
 {
   for(int h = 0; h < _height; ++h)
@@ -129,6 +134,7 @@ void Board::newGame(int totalMines)
 {
   clear();
   addMines(totalMines);
+  _totalMines = totalMines;
   calculateAdjacentBombsCount();
 }
 

@@ -38,6 +38,15 @@ class Board
    */
   int height();
 
+  /**
+   * Gets the total mines count
+   * (i.e. the total number of mines on the minefield).
+   *
+   * \return the total mines count.
+   */
+  int totalMines();
+
+
   Field peekAt(int x, int y);
 
   /**
@@ -106,6 +115,7 @@ class Board
  private:
   int _width;
   int _height;
+  int _totalMines;
   std::vector< std::vector< Field > > _map;
   GameState _state;
 };
