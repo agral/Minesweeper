@@ -72,7 +72,10 @@ class Board
    * If the discovered field is empty, the total number of mines in adjacent
    * cells is revealed.
    *
-   * \pre: The game is in the active state.
+   * \pre:
+   *   * The game is in the active state.
+   *   * y is in range: 0 <= y < _height,
+   *   * x is in range: 0 <= x < _width,
    * \post: The field is revealed and the game state is updated accordingly.
    */
   void discover(int y, int x);
@@ -84,6 +87,7 @@ class Board
    * random positions on the board.
    *
    * \pre totalMines is in range: 0 < totalMines < (_width * _height).
+   *
    * \post The board has totalMines mines placed at random distinct locations,
    * which did not already contain a bomb.
    */

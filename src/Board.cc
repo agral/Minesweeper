@@ -85,17 +85,29 @@ void Board::calculateAdjacentBombsCount()
 
 void Board::discover(int y, int x)
 {
-  if (!((_state == GameState::FRESH) || (_state == GameState::IN_PROGRESS)))
+  // Does nothing for the cells outside the minefield:
+  if ((y < 0) || (y >= _height) || (x < 0) || (x >= _width))
   {
-    // Does not discover fields if the game has ended.
+    printf("[Board][Discover] tile (%d,%d) is outside the minefield. "
+           "Not discovering.\n", y, x);
     return;
   }
 
-  if (_map[y][x].isKnown())
+  // Does not discover fields if the game has ended.
+  if (!((_state == GameState::FRESH) || (_state == GameState::IN_PROGRESS)))
   {
-    // Does nothing if a field is known (discovered) already:
     return;
   }
+
+  // Does nothing if a field is known (discovered) already:
+  if (_map[y][x].isKnown())
+  {
+    printf("[Board][Discover] Field (%d,%d) is already known. "
+           "Not discovering.\n", y, x);
+    return;
+  }
+
+
   printf("[Board] Discover: y=%d, x=%d\n", y, x);
 
   if (_map[y][x].isBomb())
