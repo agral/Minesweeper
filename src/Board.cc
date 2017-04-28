@@ -88,7 +88,7 @@ void Board::discover(int y, int x)
   // Does nothing for the cells outside the minefield:
   if ((y < 0) || (y >= _height) || (x < 0) || (x >= _width))
   {
-    printf("[Board][Discover] tile (%d,%d) is outside the minefield. "
+    printf("[Board][discover] tile (%d,%d) is outside the minefield. "
            "Not discovering.\n", y, x);
     return;
   }
@@ -118,6 +118,7 @@ void Board::discover(int y, int x)
   else
   {
     _map[y][x].setIsKnown(true);
+    _map[y][x].setFlagCode(FlagCode::Empty);
 
     // Discovers neighbors automatically if adjacentBombsCount is zero:
     if (0 == _map[y][x].adjacentBombsCount())
@@ -204,6 +205,30 @@ void Board::newGame(int totalMines)
   addMines(totalMines);
   _totalMines = totalMines;
   calculateAdjacentBombsCount();
+}
+
+void Board::cycleFlag(int y, int x)
+{
+  FlagCode fc = _map[y][x].flagCode();
+  switch (fc)
+  {
+    case FlagCode::Empty :
+      _map[y][x].setFlagCode(FlagCode::Mine);
+      printf("Applying MINE flag.\n");
+      break;
+    case FlagCode::Mine :
+      _map[y][x].setFlagCode(FlagCode::Unknown);
+      printf("Applying UNKNOWN flag.\n");
+      break;
+    case FlagCode::Unknown :
+      _map[y][x].setFlagCode(FlagCode::Empty);
+      printf("Applying EMPTY flag.\n");
+      break;
+
+    default:
+      printf("Error: unrecognized flag encountered while cycling flags.\n");
+      break;
+  }
 }
 
 GameState Board::state()

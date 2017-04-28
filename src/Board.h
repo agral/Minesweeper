@@ -72,10 +72,9 @@ class Board
    * If the discovered field is empty, the total number of mines in adjacent
    * cells is revealed.
    *
-   * \pre:
-   *   * The game is in the active state.
-   *   * y is in range: 0 <= y < _height,
-   *   * x is in range: 0 <= x < _width,
+   * \pre: * The game is in the active state.
+   *       * y is in range: 0 <= y < _height,
+   *       * x is in range: 0 <= x < _width,
    * \post: The field is revealed and the game state is updated accordingly.
    */
   void discover(int y, int x);
@@ -106,6 +105,20 @@ class Board
    * \post The new game has started, as described in detail above.
    */
   void newGame(int totalMines);
+
+  /**
+   * Sets the flag of the specified Field to the next one.
+   *
+   * The flags are cycled in the following order:
+   *     FlagCode::Empty --> FlagCode::Mine --> FlagCode::Unknown
+   *     --> FlagCode::Empty
+   *
+   * \post The specified Field has the following FlagCode:
+   *     * FlagCode::Mine if it had FlagCode::Empty so far,
+   *     * FlagCode::Unknown if it had FlagCode::Mine so far,
+   *     * FlagCode::Empty if it had FlagCode::Unknown so far.
+   */
+  void cycleFlag(int y, int x);
 
   /**
    * Returns current state of the game.

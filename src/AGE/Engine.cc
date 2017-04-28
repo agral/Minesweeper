@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "Globals.h"
+#include "../Field.h" // for FlagCode
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -133,7 +134,7 @@ void Engine::startLoop()
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
         {
           printf("[Mouse] Right button pressed.\n");
-          _board.print();
+          _board.cycleFlag(tileY, tileX);
         }
 
         // Middle mouse button:
@@ -187,19 +188,12 @@ void Engine::draw()
       {
         int posX = TILE_SIZE * x;
         Field f = _board.peekAt(y, x);
+
         if (f.isKnown())
         {
           if (f.isBomb())
           {
             boardSprite.render(posX, posY, &clipBombNormal);
-          }
-          else if (FlagCode::Mine == f.flagCode())
-          {
-            boardSprite.render(posX, posY, &clipRedFlag);
-          }
-          else if (FlagCode::Unknown == f.flagCode())
-          {
-            boardSprite.render(posX, posY, &clipQuestionMark);
           }
           else
           {
@@ -209,7 +203,18 @@ void Engine::draw()
         }
         else
         {
-          boardSprite.render(posX, posY, &clipFieldUnknown);
+          if (FlagCode::Mine == f.flagCode())
+          {
+            boardSprite.render(posX, posY, &clipRedFlag);
+          }
+          else if (FlagCode::Unknown == f.flagCode())
+          {
+            boardSprite.render(posX, posY, &clipQuestionMark);
+          }
+          else
+          {
+            boardSprite.render(posX, posY, &clipFieldUnknown);
+          }
         }
       }
     }
