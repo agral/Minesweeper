@@ -1,4 +1,4 @@
-#include <cstdio>
+#include "Logger.h"
 
 #include "AGE/Engine.h"
 
@@ -6,19 +6,19 @@ int main()
 {
   AGE::Engine engine;
 
-  printf("Initializing...\n");
+  Logger::instance().log(Logger::INFO, "Initializing...\n");
   if (!engine.init())
   {
     printf("Advanced Game Engine failed to initialize. Exiting.\n");
     exit(1);
   }
 
-  printf("Initialization complete.\nLoading the media...\n");
+  Logger::instance().log(Logger::INFO, "Initialization complete.\nLoading the media...\n");
   if (!engine.loadMedia())
   {
-    printf("Warning: some media files failed to load!\n");
+    Logger::instance().log(Logger::WARNING, "Warning: some media files failed to load!\n");
   }
-  printf("Media loded.\n");
+  Logger::instance().log(Logger::INFO, "Media loded.\n");
 
   engine.startLoop();
 
