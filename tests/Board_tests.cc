@@ -7,8 +7,8 @@ TEST_CASE("Board class tests", "[Board]")
   {
     const int desired_width = 11;
     const int desired_height = 12;
-    Board b(desired_width, desired_height);
-    REQUIRE(desired_width == b.width());
+    Board b(desired_height, desired_width);
     REQUIRE(desired_height == b.height());
+    REQUIRE(desired_width == b.width());
   }
 }
