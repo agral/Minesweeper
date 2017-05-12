@@ -6,19 +6,22 @@ int main()
 {
   AGE::Engine engine;
 
-  Logger::instance().log(Logger::INFO, "Initializing...\n");
+  Logger::instance().log(Logger::INFO, "Initializing...");
   if (!engine.init())
   {
-    printf("Advanced Game Engine failed to initialize. Exiting.\n");
+    Logger::instance().log(Logger::CRITICAL,
+        "Advanced Game Engine failed to initialize. Exiting.");
     exit(1);
   }
 
-  Logger::instance().log(Logger::INFO, "Initialization complete.\nLoading the media...\n");
+  Logger::instance().log(Logger::INFO, "Initialization complete.");
+  Logger::instance().log(Logger::INFO, "Loading the media...");
   if (!engine.loadMedia())
   {
-    Logger::instance().log(Logger::WARNING, "Warning: some media files failed to load!\n");
+    Logger::instance().log(Logger::WARNING,
+        "Warning: some media files failed to load!");
   }
-  Logger::instance().log(Logger::INFO, "Media loded.\n");
+  Logger::instance().log(Logger::INFO, "Media loded.");
 
   engine.startLoop();
 
