@@ -8,7 +8,7 @@ LoggerSettings::LoggerSettings(Level cutoff) :
 {
   // All the work is done in the initialization block.
 }
-LoggerSettings loggerSettings(LEVEL_DEBUG);
+LoggerSettings loggerSettings(LEVEL_VERBOSE);
 
 
 Logger::Logger(Level level) :

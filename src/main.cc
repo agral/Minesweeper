@@ -1,4 +1,4 @@
-#include "Logger/Logger.h"
+#include "Log/Logger.h"
 #include "AGE/Engine.h"
 
 int main()
