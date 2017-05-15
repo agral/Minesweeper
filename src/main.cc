@@ -1,4 +1,4 @@
-#include "Logger.h"
+#include "Logger/Logger.h"
 
 #include "AGE/Engine.h"
 
@@ -6,22 +6,24 @@ int main()
 {
   AGE::Engine engine;
 
-  Logger::instance().log(Logger::INFO, "Initializing...");
+  Log::Logger(Log::Level::INFO) << "Outputting strings, " << 123 << 'a';
+
+  // Logger::instance().log(Logger::INFO, "Initializing...");
   if (!engine.init())
   {
-    Logger::instance().log(Logger::CRITICAL,
-        "Advanced Game Engine failed to initialize. Exiting.");
+    // Logger::instance().log(Logger::CRITICAL,
+        // "Advanced Game Engine failed to initialize. Exiting.");
     exit(1);
   }
 
-  Logger::instance().log(Logger::INFO, "Initialization complete.");
-  Logger::instance().log(Logger::INFO, "Loading the media...");
+  // Logger::instance().log(Logger::INFO, "Initialization complete.");
+  // Logger::instance().log(Logger::INFO, "Loading the media...");
   if (!engine.loadMedia())
   {
-    Logger::instance().log(Logger::WARNING,
-        "Warning: some media files failed to load!");
+    // Logger::instance().log(Logger::WARNING,
+        // "Warning: some media files failed to load!");
   }
-  Logger::instance().log(Logger::INFO, "Media loded.");
+  // Logger::instance().log(Logger::INFO, "Media loded.");
 
   engine.startLoop();
 
