@@ -2,10 +2,10 @@
 
 #include "Globals.h"
 #include "../Field.h" // for FlagCode
+#include "../Log/Logger.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <cstdio>
 
 namespace AGE
 {
@@ -15,34 +15,41 @@ Engine::Engine() :
   _isClosed(false),
   _board(startingBoardHeight, startingBoardWidth)
 {
+  Log::VERBOSE() << "Entering the Engine class constructor...";
   _board.newGame(startingTotalMines);
 }
 
 
 Engine::~Engine()
 {
+  Log::VERBOSE() << "Entering the Engine class destructor...";
   close();
 }
 
 
 bool Engine::init()
 {
+  Log::VERBOSE() << "Entering the Engine::init() method...";
   bool successFlag = true;
   if (!_isInitialized)
   {
+    Log::DEBUG() << "Initializing the SDL";
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-      printf("SDL failed to initialize.\nSDL error: %s\n", SDL_GetError());
+      Log::ERROR() << "SDL failed to initialize!";
+      Log::ERROR() << "SDL error: " << SDL_GetError();
       successFlag = false;
     }
     else
     {
       // Sets linear texture filtering:
+      Log::DEBUG() << "Setting linear texture filtering";
       if (!SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1"))
       {
-        printf("Warning: Could not enable linear texture filtering.\n");
+        Log::WARNING() << "Could not enable linear texture filtering.";
       }
 
+      Log::VERBOSE() << "Creating the game window";
       window = SDL_CreateWindow(
           windowTitle,
           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -50,27 +57,29 @@ bool Engine::init()
           );
       if (nullptr == window)
       {
-        printf("SDL window could not be created!\nSDL error: %s\n",
-            SDL_GetError());
+        Log::ERROR() << "SDL window could not be created!";
+        Log::ERROR() << "SDL error: " << SDL_GetError();
         successFlag = false;
       }
       else
       {
+        Log::VERBOSE() << "Creating a vertical-synced renderer";
         renderer = SDL_CreateRenderer(window, -1,
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         if (nullptr == renderer)
         {
-          printf("Could not create a vsynced renderer.\n");
-          printf("SDL error: %s\n", SDL_GetError());
+          Log::ERROR() << "Could not create a vsynced renderer!";
+          Log::ERROR() << "SDL error: " << SDL_GetError();
           successFlag = false;
         }
         else
         {
+          Log::VERBOSE() << "Initializing the IMG module";
           int imgFlags = IMG_INIT_PNG;
           if (!(IMG_Init(imgFlags) & imgFlags))
           {
-            printf("SDL_Image module could not initialize.\n");
-            printf("SDL_image error: %s\n", IMG_GetError());
+            Log::ERROR() << "SDL_Image module could not initialize.";
+            Log::ERROR() << "SDL_image error: ", IMG_GetError();
             successFlag = false;
           }
           else
@@ -89,8 +98,10 @@ bool Engine::init()
 
 bool Engine::loadMedia()
 {
+  Log::VERBOSE() << "Entering the Engine::loadMedia() method...";
   bool successFlag = true;
 
+  Log::VERBOSE() << "Loading the Board sprite";
   boardSprite.loadFromFile("./Graphics/Tiles.png", renderer);
 
   return successFlag;
@@ -99,6 +110,7 @@ bool Engine::loadMedia()
 
 void Engine::startLoop()
 {
+  Log::VERBOSE() << "Entering the Engine::startLoop() method...";
   SDL_Event sdlEvent;
   bool quitFlag = false;
   while (!quitFlag)
@@ -121,26 +133,28 @@ void Engine::startLoop()
 
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
-        printf("Tile: (y=%d, x=%d)\n", tileY, tileX);
 
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
-          printf("[Mouse] Left button pressed.\n");
+          Log::DEBUG() << "[Mouse] LMB (" << x << ", " << y << ") "
+              << "[tile: (" << tileX << ", " << tileY << "])";
           _board.discover(tileY, tileX);
         }
 
         // Right mouse button:
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT))
         {
-          printf("[Mouse] Right button pressed.\n");
+          Log::DEBUG() << "[Mouse] RMB (" << x << ", " << y << ") "
+              << "[tile: (" << tileX << ", " << tileY << "])";
           _board.cycleFlag(tileY, tileX);
         }
 
         // Middle mouse button:
         else if (buttonState & SDL_BUTTON(SDL_BUTTON_MIDDLE))
         {
-          printf("[Mouse] Middle button pressed.\n");
+          Log::DEBUG() << "[Mouse] MMB (" << x << ", " << y << ") "
+              << "[tile: (" << tileX << ", " << tileY << "])";
           _board.newGame(_board.totalMines());
         }
       }
@@ -154,15 +168,19 @@ void Engine::startLoop()
 
 void Engine::close()
 {
+  Log::VERBOSE() << "Entering the Engine::close() method...";
   if (!_isClosed)
   {
     boardSprite.free();
 
+    Log::DEBUG() << "[SDL] Destroying the renderer";
     SDL_DestroyRenderer(renderer);
     renderer = nullptr;
+    Log::DEBUG() << "[SDL] Destroying the game window";
     SDL_DestroyWindow(window);
     window = nullptr;
 
+    Log::DEBUG() << "[SDL] Quitting the SDL";
     IMG_Quit();
     SDL_Quit();
 
@@ -174,6 +192,7 @@ void Engine::close()
 
 void Engine::draw()
 {
+  Log::VERBOSE() << "Entering the Engine::Draw() method...";
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
 
