@@ -4,11 +4,11 @@
 
 int main()
 {
+  Log::VERBOSE() << "Starting the main method.";
+  Log::DEBUG() << "Creating the AGE::Engine...";
   AGE::Engine engine;
 
-  Log::Logger(Log::Level::INFO) << "Outputting strings, " << 123 << 'a';
-
-  // Logger::instance().log(Logger::INFO, "Initializing...");
+  Log::DEBUG() << "Initializing the AGE::Engine...";
   if (!engine.init())
   {
     // Logger::instance().log(Logger::CRITICAL,
