@@ -1,12 +1,13 @@
 #include "Board.h"
+#include "Log/Logger.h"
 #include <random>
-#include <iostream>
 
 Board::Board(int height, int width) :
   _height(height),
   _width(width),
   _state(GameState::FRESH)
 {
+  Log::VERBOSE() << "Entering the Board class constructor...";
   _map.resize(height);
   for(int h = 0; h < height; ++h)
   {
@@ -36,6 +37,8 @@ int Board::totalMines()
 
 void Board::clear()
 {
+  Log::VERBOSE() << "Entering the Board::clear() method...";
+  Log::DEBUG() << "[Board] Clearing the board.";
   for(int h = 0; h < _height; ++h)
   {
     for(int w = 0; w < _width; ++w)
@@ -49,6 +52,8 @@ void Board::clear()
 
 void Board::calculateAdjacentBombsCount()
 {
+  Log::VERBOSE() <<
+      "Entering the Board::calculateAdjacentBombsCount() method...";
   for(int h = 0; h < _height; ++h)
   {
     for(int w = 0; w < _width; ++w)
@@ -85,34 +90,37 @@ void Board::calculateAdjacentBombsCount()
 
 void Board::discover(int y, int x)
 {
+  Log::VERBOSE() << "Entering the Board::discover() method...";
   // Does nothing for the cells outside the minefield:
   if ((y < 0) || (y >= _height) || (x < 0) || (x >= _width))
   {
-    printf("[Board][discover] tile (%d,%d) is outside the minefield. "
-           "Not discovering.\n", y, x);
+    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x <<
+        ") is outside of the minefield - not discovering.";
     return;
   }
 
   // Does not discover fields if the game has ended.
   if (!((_state == GameState::FRESH) || (_state == GameState::IN_PROGRESS)))
   {
+    Log::VERBOSE() << "[Board][Discover] The game has ended - not discovering.";
     return;
   }
 
   // Does nothing if a field is known (discovered) already:
   if (_map[y][x].isKnown())
   {
-    printf("[Board][Discover] Field (%d,%d) is already known. "
-           "Not discovering.\n", y, x);
+    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x <<
+        ") is already known - not discovering.";
     return;
   }
 
 
-  printf("[Board] Discover: y=%d, x=%d\n", y, x);
+  Log::DEBUG() <<
+      "[Board][Discover] Revealing tile: (" << y << ", " << x << ").";
 
   if (_map[y][x].isBomb())
   {
-    printf("GAME OVER\n");
+    Log::INFO() << "[Board] GAME OVER.";
     _state = GameState::LOST;
   }
   else
@@ -176,7 +184,8 @@ void Board::discover(int y, int x)
 
 void Board::addMines(int totalMines)
 {
-  std::cout << "Adding " << totalMines << " mines." << std::endl;
+  Log::VERBOSE() << "Entering the Board::addMines() method...";
+  Log::DEBUG() << "[Board] Adding " << totalMines << " mines.";
   std::mt19937 rng;
   rng.seed(std::random_device()());
   std::uniform_int_distribution<int> randy(0, _height - 1);
@@ -195,12 +204,14 @@ void Board::addMines(int totalMines)
     {
       _map[y][x].setIsBomb(true);
       minesPlaced += 1;
+      Log::VERBOSE() << "[Board] Bomb planted at (" << y << ", " << x << ").";
     }
   }
 }
 
 void Board::newGame(int totalMines)
 {
+  Log::VERBOSE() << "Entering the Board::newGame() method...";
   clear();
   addMines(totalMines);
   _totalMines = totalMines;
@@ -209,9 +220,12 @@ void Board::newGame(int totalMines)
 
 void Board::cycleFlag(int y, int x)
 {
+  Log::VERBOSE() << "Entering the Board::cycleFlag() method...";
   if (_map[y][x].isKnown())
   {
     // Does not allow putting flags on the fields that are already known:
+    Log::VERBOSE() << "[Board] The tile: (" << y << ", " << x <<
+        ") is already known - flags are not cycled.";
     return;
   }
 
@@ -220,19 +234,17 @@ void Board::cycleFlag(int y, int x)
   {
     case FlagCode::Empty :
       _map[y][x].setFlagCode(FlagCode::Mine);
-      printf("Applying MINE flag.\n");
       break;
     case FlagCode::Mine :
       _map[y][x].setFlagCode(FlagCode::Unknown);
-      printf("Applying UNKNOWN flag.\n");
       break;
     case FlagCode::Unknown :
       _map[y][x].setFlagCode(FlagCode::Empty);
-      printf("Applying EMPTY flag.\n");
       break;
 
     default:
-      printf("Error: unrecognized flag encountered while cycling flags.\n");
+      Log::WARNING() <<
+          "Unrecognized flag encountered while trying to cycle flags.";
       break;
   }
 }
@@ -242,6 +254,7 @@ GameState Board::state()
   return _state;
 }
 
+#include <iostream>
 void Board::print()
 {
   for(int h = 0; h < _height; ++h)
