@@ -8,6 +8,7 @@ namespace Log
 
 enum Level
 {
+  LEVEL_TRACE,
   LEVEL_VERBOSE,
   LEVEL_DEBUG,
   LEVEL_INFO,
@@ -55,6 +56,7 @@ class Logger
     std::string sLabel;
     switch (level)
     {
+      case LEVEL_TRACE:   sLabel = "TRACE";   break;
       case LEVEL_VERBOSE: sLabel = "VERBOSE"; break;
       case LEVEL_DEBUG:   sLabel = "DEBUG";   break;
       case LEVEL_INFO:    sLabel = "INFO";    break;
@@ -73,6 +75,7 @@ class Logger
     char cLabel;
     switch (level)
     {
+      case LEVEL_TRACE:   cLabel = 'T'; break;
       case LEVEL_VERBOSE: cLabel = 'V'; break;
       case LEVEL_DEBUG:   cLabel = 'D'; break;
       case LEVEL_INFO:    cLabel = 'I'; break;
@@ -87,6 +90,7 @@ class Logger
   }
 };
 
+extern Logger TRACE();
 extern Logger VERBOSE();
 extern Logger DEBUG();
 extern Logger INFO();

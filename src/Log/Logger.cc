@@ -7,8 +7,9 @@ LoggerSettings::LoggerSettings(Level cutoff) :
   cutoffLevel(cutoff)
 {
   // All the work is done in the initialization block.
+  std::cout << "Logger initialized." << std::endl;
 }
-LoggerSettings loggerSettings(LEVEL_VERBOSE);
+LoggerSettings loggerSettings(LEVEL_DEBUG);
 
 
 Logger::Logger(Level level) :
@@ -30,6 +31,12 @@ Logger::~Logger()
   }
 
   _opened = false;
+}
+
+
+Logger TRACE()
+{
+  return Logger(LEVEL_TRACE);
 }
 
 
