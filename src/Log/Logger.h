@@ -1,7 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <iostream>
+#include <string>
 
 namespace Log
 {
@@ -36,16 +36,7 @@ class Logger
   virtual ~Logger();
 
   template <typename T>
-  Logger& operator<< (const T& msg)
-  {
-    if (_level >= loggerSettings.cutoffLevel)
-    {
-      std::cout << msg;
-      _opened = true;
-    }
-
-    return *this;
-  }
+  Logger& operator<< (const T& message);
 
  private:
   Level _level;
@@ -101,5 +92,7 @@ extern Logger FATAL();
 
 
 } // namespace Log
+
+#include "Logger.tcc"
 
 #endif // LOGGER_H
