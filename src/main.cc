@@ -5,7 +5,7 @@ int main()
 {
   // A block defining the lifetime of all the game objects:
   {
-    Log::VERBOSE() << "Starting the main method.";
+    Log::TRACE() << "Starting the main method.";
     Log::DEBUG() << "Creating the AGE::Engine...";
     AGE::Engine engine;
 
@@ -32,6 +32,6 @@ int main()
     engine.close();
   }
 
-  Log::VERBOSE() << "Terminating - bye!";
+  Log::DEBUG() << "Terminating - bye!";
   return 0;
 }
