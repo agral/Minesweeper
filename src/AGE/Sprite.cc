@@ -1,7 +1,7 @@
+#include "../Log/Logger.h"
 #include "Sprite.h"
 
 #include <SDL_image.h>
-#include <cstdio>
 
 
 namespace AGE
@@ -13,18 +13,23 @@ Sprite::Sprite() :
   _width(0),
   _height(0)
 {
+  Log::VERBOSE() << "Entering the Sprite class constructor...";
+
   // All the work is done in the initializer.
 }
 
 
 Sprite::~Sprite()
 {
+  Log::VERBOSE() << "Entering the Sprite class destructor...";
   free();
 }
 
 
 bool Sprite::loadFromFile(const char *path, SDL_Renderer *renderer)
 {
+  Log::VERBOSE() << "Entering the Sprite::loadFromFile() method...";
+
   // Disposes of previous texture, if there was any:
   if (nullptr != _texture)
   {
@@ -33,24 +38,25 @@ bool Sprite::loadFromFile(const char *path, SDL_Renderer *renderer)
 
   if (nullptr == renderer)
   {
-    printf("Error: Can not assign a null renderer to texture <%s>.\n", path);
+    Log::ERROR() << "Can not assign a null renderer to the texture" << path;
     return false;
   }
   _renderer = renderer;
 
+  Log::DEBUG() << "Loading the surface: [" << path << "] ...";
   SDL_Surface *surface = IMG_Load(path);
   if (nullptr == surface)
   {
-    printf("Image <%s> could not be loaded.\n"
-           "SDL error: %s\n", path, SDL_GetError());
+    Log::ERROR() << "Image [" << path << "] could not be loaded.";
+    Log::ERROR() << "SDL error: " << SDL_GetError();
   }
   else
   {
     _texture = SDL_CreateTextureFromSurface(_renderer, surface);
     if (nullptr == _texture)
     {
-      printf("Unable to create texture from <%s>.\n"
-             "SDL error: %s\n", path, SDL_GetError());
+      Log::ERROR() << "Unable to create texture from [" << path << "].";
+      Log::ERROR() << "SDL error: " << SDL_GetError();
     }
     else
     {
@@ -67,8 +73,10 @@ bool Sprite::loadFromFile(const char *path, SDL_Renderer *renderer)
 
 void Sprite::free()
 {
+  Log::VERBOSE() << "Entering the Sprite::free() method...";
   if (nullptr != _texture)
   {
+    Log::DEBUG() << "Freeing the texture " << _texture;
     SDL_DestroyTexture(_texture);
     _texture = nullptr;
     _width = 0;
@@ -80,6 +88,7 @@ void Sprite::free()
 void Sprite::render(int x, int y, SDL_Rect *clip, double angle,
     SDL_Point *center, SDL_RendererFlip flip)
 {
+  Log::VERBOSE() << "Entering the Sprite::render() method...";
   // Sets target bounding box, using full texture geometry:
   SDL_Rect targetBox = {x, y, _width, _height};
 
