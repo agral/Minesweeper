@@ -103,16 +103,4 @@ void Sprite::render(int x, int y, SDL_Rect *clip, double angle,
   SDL_RenderCopyEx(_renderer, _texture, clip, &targetBox, angle, center, flip);
 }
 
-
-int Sprite::width()
-{
-  return _width;
-}
-
-
-int Sprite::height()
-{
-  return _height;
-}
-
 } // namespace AGE

@@ -80,14 +80,14 @@ class Sprite
    *
    * \return an int value representing the underlying texture width in pixels.
    */
-  int width();
+  int width() { return _width; }
 
   /**
    * Returns the height of the texture in pixels.
    *
    * \return an int value representing the underlying texture height in pixels.
    */
-  int height();
+  int height() { return _height; }
 
  private:
   /**
