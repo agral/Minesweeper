@@ -8,6 +8,7 @@ Field::Field() :
   _isBomb(false),
   _isKnown(false)
 {
+  Log::TRACE() << "Entering the Field class constructor...";
   // All the work is done in the initializer.
 }
 
@@ -53,6 +54,7 @@ void Field::setIsKnown(bool isKnown)
 
 void Field::clear()
 {
+  Log::TRACE() << "Entering the Field::clear() method...";
   _adjacentBombsCount = 0;
   _flagCode = FlagCode::Empty;
   _isBomb = false;
