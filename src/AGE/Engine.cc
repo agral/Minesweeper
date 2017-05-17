@@ -15,21 +15,21 @@ Engine::Engine() :
   _isClosed(false),
   _board(startingBoardHeight, startingBoardWidth)
 {
-  Log::VERBOSE() << "Entering the Engine class constructor...";
+  Log::TRACE() << "Entering the Engine class constructor...";
   _board.newGame(startingTotalMines);
 }
 
 
 Engine::~Engine()
 {
-  Log::VERBOSE() << "Entering the Engine class destructor...";
+  Log::TRACE() << "Entering the Engine class destructor...";
   close();
 }
 
 
 bool Engine::init()
 {
-  Log::VERBOSE() << "Entering the Engine::init() method...";
+  Log::TRACE() << "Entering the Engine::init() method...";
   bool successFlag = true;
   if (!_isInitialized)
   {
@@ -98,7 +98,7 @@ bool Engine::init()
 
 bool Engine::loadMedia()
 {
-  Log::VERBOSE() << "Entering the Engine::loadMedia() method...";
+  Log::TRACE() << "Entering the Engine::loadMedia() method...";
   bool successFlag = true;
 
   Log::VERBOSE() << "Loading the Board sprite";
@@ -110,7 +110,7 @@ bool Engine::loadMedia()
 
 void Engine::startLoop()
 {
-  Log::VERBOSE() << "Entering the Engine::startLoop() method...";
+  Log::TRACE() << "Entering the Engine::startLoop() method...";
   SDL_Event sdlEvent;
   bool quitFlag = false;
   while (!quitFlag)
@@ -168,7 +168,7 @@ void Engine::startLoop()
 
 void Engine::close()
 {
-  Log::VERBOSE() << "Entering the Engine::close() method...";
+  Log::TRACE() << "Entering the Engine::close() method...";
   if (!_isClosed)
   {
     boardSprite.free();
@@ -192,7 +192,7 @@ void Engine::close()
 
 void Engine::draw()
 {
-  Log::VERBOSE() << "Entering the Engine::Draw() method...";
+  Log::TRACE() << "Entering the Engine::Draw() method...";
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
 

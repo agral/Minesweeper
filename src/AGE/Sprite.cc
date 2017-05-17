@@ -13,7 +13,7 @@ Sprite::Sprite() :
   _width(0),
   _height(0)
 {
-  Log::VERBOSE() << "Entering the Sprite class constructor...";
+  Log::TRACE() << "Entering the Sprite class constructor...";
 
   // All the work is done in the initializer.
 }
@@ -21,14 +21,14 @@ Sprite::Sprite() :
 
 Sprite::~Sprite()
 {
-  Log::VERBOSE() << "Entering the Sprite class destructor...";
+  Log::TRACE() << "Entering the Sprite class destructor...";
   free();
 }
 
 
 bool Sprite::loadFromFile(const char *path, SDL_Renderer *renderer)
 {
-  Log::VERBOSE() << "Entering the Sprite::loadFromFile() method...";
+  Log::TRACE() << "Entering the Sprite::loadFromFile() method...";
 
   // Disposes of previous texture, if there was any:
   if (nullptr != _texture)
@@ -73,7 +73,7 @@ bool Sprite::loadFromFile(const char *path, SDL_Renderer *renderer)
 
 void Sprite::free()
 {
-  Log::VERBOSE() << "Entering the Sprite::free() method...";
+  Log::TRACE() << "Entering the Sprite::free() method...";
   if (nullptr != _texture)
   {
     Log::DEBUG() << "Freeing the texture " << _texture;
@@ -88,7 +88,7 @@ void Sprite::free()
 void Sprite::render(int x, int y, SDL_Rect *clip, double angle,
     SDL_Point *center, SDL_RendererFlip flip)
 {
-  Log::VERBOSE() << "Entering the Sprite::render() method...";
+  Log::TRACE() << "Entering the Sprite::render() method...";
   // Sets target bounding box, using full texture geometry:
   SDL_Rect targetBox = {x, y, _width, _height};
 
