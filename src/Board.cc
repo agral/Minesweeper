@@ -15,26 +15,6 @@ Board::Board(int height, int width) :
   }
 }
 
-Field Board::peekAt(int y, int x)
-{
-  return _map[y][x];
-}
-
-int Board::width()
-{
-  return _width;
-}
-
-int Board::height()
-{
-  return _height;
-}
-
-int Board::totalMines()
-{
-  return _totalMines;
-}
-
 void Board::clear()
 {
   Log::TRACE() << "Entering the Board::clear() method...";

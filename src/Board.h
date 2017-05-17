@@ -25,18 +25,18 @@ class Board
 
  public:
   /**
-   * Gets the value of the width of the board.
+   * Gets the width of the board in Fields unit.
    *
-   * \return the width of the board.
+   * \return the width of the board in Fields unit.
    */
-  int width();
+  int width() { return _width; }
 
   /**
-   * Gets the value of the height of the board.
+   * Gets the height of the board in Fields unit.
    *
-   * \return the height of the board.
+   * \return the height of the board in Fields unit.
    */
-  int height();
+  int height() { return _height; }
 
   /**
    * Gets the total mines count
@@ -44,10 +44,21 @@ class Board
    *
    * \return the total mines count.
    */
-  int totalMines();
+  int totalMines() { return _totalMines; }
 
-
-  Field peekAt(int y, int x);
+  /**
+   * Gets the Field instance at given coordinates on the board.
+   *
+   * \param y The exact Y-axis coordinate of the requested Field.
+   * \param x The exact X-axis coordinate of the requested Field.
+   *
+   * \note Please note that the Fields on the Board are zero-indexed,
+   *       so that the top-left Field has (0,0) coordinate and the bottom-right
+   *       Field has (height-1, width-1) coordinate.
+   * \pre y and x parameters are valid integers in the specified ranges.
+   * \return A requested Field instance.
+   */
+  Field peekAt(int y, int x) { return _map.at(y).at(x); }
 
   /**
    * Clears the board by converting each field to a clear one.
