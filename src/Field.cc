@@ -1,5 +1,7 @@
 #include "Field.h"
 
+#include "Log/Logger.h"
+
 #include <string>
 
 Field::Field() :
