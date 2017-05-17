@@ -80,7 +80,7 @@ void Board::calculateAdjacentBombsCount()
       if ((h < _height-1) && (_map[h+1][w].isBomb()))
         count += 1; // bottom neighbor is a bomb.
 
-      if ((h < _height-1) && (_map[h+1][w+1].isBomb()))
+      if ((h < _height-1) && (w < _width-1) && (_map[h+1][w+1].isBomb()))
         count += 1; // bottom right neighbor is a bomb.
 
       _map[h][w].setAdjacentBombsCount(count);
