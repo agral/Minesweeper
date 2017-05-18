@@ -21,7 +21,6 @@ void Timer::start()
 
   _pausedTicks = 0;
   _startTicks = SDL_GetTicks();
-  Log::DEBUG() << "[Timer] instance " << this << " has been started.";
 }
 
 
@@ -31,7 +30,6 @@ void Timer::stop()
   _started = false;
   _pausedTicks = 0;
   _startTicks = 0;
-  Log::DEBUG() << "[Timer] instance " << this << " has been stopped.";
 }
 
 
@@ -43,8 +41,6 @@ void Timer::pause()
 
     _pausedTicks = SDL_GetTicks() - _startTicks;
     _startTicks = 0;
-
-    Log::DEBUG() << "[Timer] instance " << this << " has been paused.";
   }
 }
 
@@ -57,7 +53,6 @@ void Timer::resume()
 
     _startTicks = SDL_GetTicks() - _pausedTicks;
     _pausedTicks = 0;
-    Log::DEBUG() << "[Timer] instance " << this << " has been resumed.";
   }
 }
 
