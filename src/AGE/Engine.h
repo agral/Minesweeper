@@ -25,6 +25,9 @@ class Engine
   bool _isInitialized;
   bool _isClosed;
 
+  int _boardOffsetY;
+  int _boardOffsetX;
+
   Board _board;
 };
 

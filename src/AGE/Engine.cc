@@ -17,6 +17,11 @@ Engine::Engine() :
   _board(startingBoardHeight, startingBoardWidth)
 {
   _board.newGame(startingTotalMines);
+
+  int boardHeightPx = _board.height() * TILE_SIZE;
+  int boardWidthPx = _board.width() * TILE_SIZE;
+  _boardOffsetY = (screenHeight - boardHeightPx) / 2;
+  _boardOffsetX = (screenWidth - boardWidthPx) / 2;
 }
 
 
@@ -135,8 +140,8 @@ void Engine::startLoop()
         int x, y;
         Uint32 buttonState = SDL_GetMouseState(&x, &y);
 
-        int tileX = x / TILE_SIZE;
-        int tileY = y / TILE_SIZE;
+        int tileX = (x - _boardOffsetX) / TILE_SIZE;
+        int tileY = (y - _boardOffsetY) / TILE_SIZE;
 
         // Left mouse button:
         if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT))
@@ -169,7 +174,6 @@ void Engine::startLoop()
       {
         avgFps = 0;
       }
-      Log::INFO() << "Average FPS with cap: " << avgFps;
 
       // --- Redraws the board: ---
       draw();
@@ -219,10 +223,10 @@ void Engine::draw()
   {
     for (int y = 0; y < _board.height(); ++y)
     {
-      int posY = TILE_SIZE * y;
+      int posY = (TILE_SIZE * y) + _boardOffsetY;
       for (int x = 0; x < _board.width(); ++x)
       {
-        int posX = TILE_SIZE * x;
+        int posX = (TILE_SIZE * x) + _boardOffsetX;
         Field f = _board.peekAt(y, x);
 
         if (f.isKnown())
@@ -261,10 +265,10 @@ void Engine::draw()
   {
     for (int y = 0; y < _board.height(); ++y)
     {
-      int posY = TILE_SIZE * y;
+      int posY = (TILE_SIZE * y) + _boardOffsetY;
       for (int x = 0; x < _board.width(); ++x)
       {
-        int posX = TILE_SIZE * x;
+        int posX = (TILE_SIZE * x) + _boardOffsetX;
         Field f = _board.peekAt(y, x);
 
         if (f.isBomb())
