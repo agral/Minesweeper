@@ -5,7 +5,6 @@ int main()
 {
   // A block defining the lifetime of all the game objects:
   {
-    Log::TRACE() << "Starting the main method.";
     Log::DEBUG() << "Creating the AGE::Engine...";
     AGE::Engine engine;
 

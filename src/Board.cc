@@ -7,7 +7,6 @@ Board::Board(int height, int width) :
   _width(width),
   _state(GameState::FRESH)
 {
-  Log::TRACE() << "Entering the Board class constructor...";
   _map.resize(height);
   for(int h = 0; h < height; ++h)
   {
@@ -17,7 +16,6 @@ Board::Board(int height, int width) :
 
 void Board::clear()
 {
-  Log::TRACE() << "Entering the Board::clear() method...";
   Log::DEBUG() << "[Board] Clearing the board.";
   for(int h = 0; h < _height; ++h)
   {
@@ -32,8 +30,6 @@ void Board::clear()
 
 void Board::calculateAdjacentBombsCount()
 {
-  Log::TRACE() <<
-      "Entering the Board::calculateAdjacentBombsCount() method...";
   for(int h = 0; h < _height; ++h)
   {
     for(int w = 0; w < _width; ++w)
@@ -70,7 +66,6 @@ void Board::calculateAdjacentBombsCount()
 
 void Board::discover(int y, int x)
 {
-  Log::TRACE() << "Entering the Board::discover() method...";
   // Does nothing for the cells outside the minefield:
   if ((y < 0) || (y >= _height) || (x < 0) || (x >= _width))
   {
@@ -164,7 +159,6 @@ void Board::discover(int y, int x)
 
 void Board::addMines(int totalMines)
 {
-  Log::TRACE() << "Entering the Board::addMines() method...";
   Log::DEBUG() << "[Board] Adding " << totalMines << " mines.";
   std::mt19937 rng;
   rng.seed(std::random_device()());
@@ -191,7 +185,6 @@ void Board::addMines(int totalMines)
 
 void Board::newGame(int totalMines)
 {
-  Log::TRACE() << "Entering the Board::newGame() method...";
   clear();
   addMines(totalMines);
   _totalMines = totalMines;
@@ -200,7 +193,6 @@ void Board::newGame(int totalMines)
 
 void Board::cycleFlag(int y, int x)
 {
-  Log::TRACE() << "Entering the Board::cycleFlag() method...";
   if (_map[y][x].isKnown())
   {
     // Does not allow putting flags on the fields that are already known:
