@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "Globals.h"
+#include "Timer.h"
 #include "../Field.h" // for FlagCode
 #include "../Log/Logger.h"
 
@@ -108,8 +109,16 @@ void Engine::startLoop()
 {
   SDL_Event sdlEvent;
   bool quitFlag = false;
+
+  Timer fpsTimer;
+  Timer fpsCapTimer;
+  int countedFrames = 0;
+  fpsTimer.start();
+
   while (!quitFlag)
   {
+    fpsCapTimer.start();
+
     while (0 != SDL_PollEvent(&sdlEvent))
     {
       // --- Processes user's input: ---
@@ -154,8 +163,23 @@ void Engine::startLoop()
         }
       }
 
+      // --- Game logic (handled in input section) ---
+      double avgFps = countedFrames / (fpsTimer.ticks() / 1000.0);
+      if (avgFps > 2000000)
+      {
+        avgFps = 0;
+      }
+      Log::INFO() << "Average FPS with cap: " << avgFps;
+
       // --- Redraws the board: ---
       draw();
+
+      countedFrames += 1;
+      int frameTicks = fpsCapTimer.ticks();
+      if(frameTicks < TICKS_PER_FRAME)
+      {
+        SDL_Delay(TICKS_PER_FRAME - frameTicks);
+      }
     }
   }
 }

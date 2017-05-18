@@ -24,6 +24,16 @@ extern int screenWidth;
 extern int screenHeight;
 
 /**
+ * Holds the Frames Per Seconds count.
+ */
+const int FPS = 60;
+
+/**
+ * Holds the length of a frame in milliseconds.
+ */
+const int TICKS_PER_FRAME = 1000 / FPS;
+
+/**
  * The default width of the minefield, in Fields.
  */
 extern const int startingBoardWidth;
