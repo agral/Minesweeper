@@ -15,6 +15,7 @@ SDL_Renderer *renderer = nullptr;
 SDL_Surface *screenSurface = nullptr;
 
 Sprite boardSprite;
+Sprite borderSprite;
 
 const int TILE_SIZE = 14; //px;
 
@@ -36,5 +37,13 @@ SDL_Rect clipQuestionMark = {2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE};
 SDL_Rect clipBombNormal = {3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE};
 SDL_Rect clipBombExploded = {4 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE};
 
+SDL_Rect clipBorderNE = {0            , 0            , TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderN  = {TILE_SIZE    , 0            , TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderNW = {2 * TILE_SIZE, 0            , TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderE  = {0            , TILE_SIZE    , TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderW  = {2 * TILE_SIZE, TILE_SIZE    , TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderSE = {0            , 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderS  = {TILE_SIZE    , 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE};
+SDL_Rect clipBorderSW = {2 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE};
 
 } // namespace AGE

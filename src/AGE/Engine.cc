@@ -18,10 +18,10 @@ Engine::Engine() :
 {
   _board.newGame(startingTotalMines);
 
-  int boardHeightPx = _board.height() * TILE_SIZE;
-  int boardWidthPx = _board.width() * TILE_SIZE;
-  _boardOffsetY = (screenHeight - boardHeightPx) / 2;
-  _boardOffsetX = (screenWidth - boardWidthPx) / 2;
+  _boardHeightPx = _board.height() * TILE_SIZE;
+  _boardWidthPx = _board.width() * TILE_SIZE;
+  _boardOffsetY = (screenHeight - _boardHeightPx) / 2;
+  _boardOffsetX = (screenWidth - _boardWidthPx) / 2;
 }
 
 
@@ -105,6 +105,9 @@ bool Engine::loadMedia()
 
   Log::VERBOSE() << "Loading the Board sprite";
   boardSprite.loadFromFile("./Graphics/Tiles.png", renderer);
+
+  Log::VERBOSE() << "Loading the Border sprite";
+  borderSprite.loadFromFile("./Graphics/Border.png", renderer);
 
   return successFlag;
 }
@@ -194,6 +197,7 @@ void Engine::close()
   if (!_isClosed)
   {
     boardSprite.free();
+    borderSprite.free();
 
     Log::DEBUG() << "[SDL] Destroying the renderer";
     SDL_DestroyRenderer(renderer);
@@ -216,6 +220,8 @@ void Engine::draw()
 {
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
+  int oX = _boardOffsetX;
+  int oY = _boardOffsetY;
 
   // Draws only known fields (while the game is still in progress)
   if ((_board.state() == GameState::FRESH) ||
@@ -223,10 +229,10 @@ void Engine::draw()
   {
     for (int y = 0; y < _board.height(); ++y)
     {
-      int posY = (TILE_SIZE * y) + _boardOffsetY;
+      int posY = (TILE_SIZE * y) + oY;
       for (int x = 0; x < _board.width(); ++x)
       {
-        int posX = (TILE_SIZE * x) + _boardOffsetX;
+        int posX = (TILE_SIZE * x) + oX;
         Field f = _board.peekAt(y, x);
 
         if (f.isKnown())
@@ -265,10 +271,10 @@ void Engine::draw()
   {
     for (int y = 0; y < _board.height(); ++y)
     {
-      int posY = (TILE_SIZE * y) + _boardOffsetY;
+      int posY = (TILE_SIZE * y) + oY;
       for (int x = 0; x < _board.width(); ++x)
       {
-        int posX = (TILE_SIZE * x) + _boardOffsetX;
+        int posX = (TILE_SIZE * x) + oX;
         Field f = _board.peekAt(y, x);
 
         if (f.isBomb())
@@ -284,6 +290,23 @@ void Engine::draw()
     }
   }
 
+  // Draws the border:
+  borderSprite.render(oX - TILE_SIZE    , oY - TILE_SIZE     , &clipBorderNE);
+  borderSprite.render(oX + _boardWidthPx, oY - TILE_SIZE     , &clipBorderNW);
+  borderSprite.render(oX - TILE_SIZE    , oY + _boardHeightPx, &clipBorderSE);
+  borderSprite.render(oX + _boardWidthPx, oY + _boardHeightPx, &clipBorderSW);
+  for (int x = 0; x < _board.width(); ++x)
+  {
+    borderSprite.render(x * TILE_SIZE + oX, oY - TILE_SIZE     , &clipBorderN);
+    borderSprite.render(x * TILE_SIZE + oX, oY + _boardHeightPx, &clipBorderS);
+  }
+  for (int y = 0; y < _board.height(); ++y)
+  {
+    borderSprite.render(oX - TILE_SIZE    , y * TILE_SIZE + oY, &clipBorderE);
+    borderSprite.render(oX + _boardWidthPx, y * TILE_SIZE + oY, &clipBorderW);
+  }
+
+  // Finally renders everything on-screen:
   SDL_RenderPresent(renderer);
 }
 

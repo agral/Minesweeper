@@ -65,9 +65,14 @@ extern SDL_Renderer *renderer;
 extern SDL_Surface *screenSurface;
 
 /**
- * The surface containing minesweeper tiles:
+ * The spritesheet containing minesweeper tiles:
  */
 extern Sprite boardSprite;
+
+/**
+ * The spritesheet containing board borders:
+ */
+extern Sprite borderSprite;
 
 
 extern const int TILE_SIZE;
@@ -79,6 +84,15 @@ extern SDL_Rect clipRedFlag;
 extern SDL_Rect clipQuestionMark;
 extern SDL_Rect clipBombNormal;
 extern SDL_Rect clipBombExploded;
+
+extern SDL_Rect clipBorderNE;
+extern SDL_Rect clipBorderN;
+extern SDL_Rect clipBorderNW;
+extern SDL_Rect clipBorderE;
+extern SDL_Rect clipBorderW;
+extern SDL_Rect clipBorderSE;
+extern SDL_Rect clipBorderS;
+extern SDL_Rect clipBorderSW;
 
 } // namespace AGE
 

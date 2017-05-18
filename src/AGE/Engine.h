@@ -27,6 +27,8 @@ class Engine
 
   int _boardOffsetY;
   int _boardOffsetX;
+  int _boardWidthPx;
+  int _boardHeightPx;
 
   Board _board;
 };
