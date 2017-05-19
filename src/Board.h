@@ -146,6 +146,8 @@ class Board
   int _height;
   int _width;
   int _totalMines;
+  int _discoveredFields;
+  int _normalFields;
   std::vector< std::vector< Field > > _map;
   GameState _state;
 };

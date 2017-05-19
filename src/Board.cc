@@ -5,6 +5,8 @@
 Board::Board(int height, int width) :
   _height(height),
   _width(width),
+  _discoveredFields(0),
+  _normalFields(height * width),
   _state(GameState::FRESH)
 {
   _map.resize(height);
@@ -25,6 +27,9 @@ void Board::clear()
     }
   }
 
+  _discoveredFields = 0;
+  _normalFields = _height * _width;
+  _totalMines = 0;
   _state = GameState::FRESH;
 }
 
@@ -69,8 +74,8 @@ void Board::discover(int y, int x)
   // Does nothing for the cells outside the minefield:
   if ((y < 0) || (y >= _height) || (x < 0) || (x >= _width))
   {
-    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x <<
-        ") is outside of the minefield - not discovering.";
+    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x
+        << ") is outside of the minefield - not discovering.";
     return;
   }
 
@@ -84,14 +89,14 @@ void Board::discover(int y, int x)
   // Does nothing if a field is known (discovered) already:
   if (_map[y][x].isKnown())
   {
-    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x <<
-        ") is already known - not discovering.";
+    Log::VERBOSE() << "[Board][Discover] Tile: (" << y << ", " << x
+        << ") is already known - not discovering.";
     return;
   }
 
 
   Log::DEBUG() <<
-      "[Board][Discover] Revealing tile: (" << y << ", " << x << ").";
+    "[Board][Discover] Revealing tile: (" << y << ", " << x << ").";
 
   if (_map[y][x].isBomb())
   {
@@ -102,84 +107,105 @@ void Board::discover(int y, int x)
   {
     _map[y][x].setIsKnown(true);
     _map[y][x].setFlagCode(FlagCode::Empty);
+    _discoveredFields += 1;
 
-    // Discovers neighbors automatically if adjacentBombsCount is zero:
-    if (0 == _map[y][x].adjacentBombsCount())
+    // Checks whether all the non-mined fields have been discovered
+    if (_discoveredFields == _normalFields)
     {
-      // Automatically discovers top-left neighbor:
-      if ((y > 0) && (x > 0) && (!_map[y-1][x-1].isKnown()))
+      // The player has won the game!:
+      Log::INFO() << "VICTORY! The player has won the game.";
+      _state = GameState::WON;
+    }
+    else
+    {
+      // Discovers neighbors automatically if adjacentBombsCount is zero:
+      if (0 == _map[y][x].adjacentBombsCount())
       {
-        discover(y-1, x-1);
-      }
+        // Automatically discovers the top-left neighbor:
+        if ((y > 0) && (x > 0) && (!_map[y-1][x-1].isKnown()))
+        {
+          discover(y-1, x-1);
+        }
 
-      // Automatically discovers top neighbor:
-      if ((y > 0) && (!_map[y-1][x].isKnown()))
-      {
-        discover(y-1, x);
-      }
+        // Automatically discovers the top neighbor:
+        if ((y > 0) && (!_map[y-1][x].isKnown()))
+        {
+          discover(y-1, x);
+        }
 
-      // Automatically discovers top-right neighbor:
-      if ((y > 0) && (x < _width-1) && (!_map[y-1][x+1].isKnown()))
-      {
-        discover(y-1, x+1);
-      }
+        // Automatically discovers the top-right neighbor:
+        if ((y > 0) && (x < _width-1) && (!_map[y-1][x+1].isKnown()))
+        {
+          discover(y-1, x+1);
+        }
 
-      // Automatically discovers left neighbor:
-      if ((x > 0) && (!_map[y][x-1].isKnown()))
-      {
-        discover(y, x-1);
-      }
+        // Automatically discovers the left neighbor:
+        if ((x > 0) && (!_map[y][x-1].isKnown()))
+        {
+          discover(y, x-1);
+        }
 
-      // Automatically discovers right neighbor:
-      if ((x < _width-1) && (!_map[y][x+1].isKnown()))
-      {
-        discover(y, x+1);
-      }
+        // Automatically discovers the right neighbor:
+        if ((x < _width-1) && (!_map[y][x+1].isKnown()))
+        {
+          discover(y, x+1);
+        }
 
-      // Automatically discovers bottom-left neighbor:
-      if ((y < _height-1) && (x > 0) && (!_map[y+1][x-1].isKnown()))
-      {
-        discover(y+1, x-1);
-      }
+        // Automatically discovers the bottom-left neighbor:
+        if ((y < _height-1) && (x > 0) && (!_map[y+1][x-1].isKnown()))
+        {
+          discover(y+1, x-1);
+        }
 
-      // Automatically discovers bottom neighbor:
-      if ((y < _height-1) && (!_map[y+1][x].isKnown()))
-      {
-        discover(y+1, x);
-      }
+        // Automatically discovers the bottom neighbor:
+        if ((y < _height-1) && (!_map[y+1][x].isKnown()))
+        {
+          discover(y+1, x);
+        }
 
-      // Automatically discovers bottom-right neighbor:
-      if ((y < _height-1) && (x < _width-1) && (!_map[y+1][x+1].isKnown()))
-      {
-        discover(y+1, x+1);
+        // Automatically discovers the bottom-right neighbor:
+        if ((y < _height-1) && (x < _width-1) && (!_map[y+1][x+1].isKnown()))
+        {
+          discover(y+1, x+1);
+        }
       }
     }
+
   }
 }
 
 void Board::addMines(int totalMines)
 {
-  Log::DEBUG() << "[Board] Adding " << totalMines << " mines.";
-  std::mt19937 rng;
-  rng.seed(std::random_device()());
-  std::uniform_int_distribution<int> randy(0, _height - 1);
-  std::uniform_int_distribution<int> randx(0, _width - 1);
-
-  // Crops the totalMines in range: <1, (_width * _height)-1>:
-  totalMines = std::max(totalMines, 1);
-  totalMines = std::min(totalMines, (_width * _height) - 1);
-
-  int minesPlaced = 0;
-  while (minesPlaced < totalMines)
+  if ( (totalMines > 0) && (_totalMines + totalMines <= (_width * _height)) )
   {
-    int y = randy(rng);
-    int x = randx(rng);
-    if (!_map[y][x].isBomb())
+    Log::DEBUG() << "[Board] Adding " << totalMines << " mines.";
+    std::mt19937 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<int> randy(0, _height - 1);
+    std::uniform_int_distribution<int> randx(0, _width - 1);
+
+    int minesPlaced = 0;
+    while (minesPlaced < totalMines)
     {
-      _map[y][x].setIsBomb(true);
-      minesPlaced += 1;
-      Log::VERBOSE() << "[Board] Bomb planted at (" << y << ", " << x << ").";
+      int y = randy(rng);
+      int x = randx(rng);
+      if (!_map[y][x].isBomb())
+      {
+        _map[y][x].setIsBomb(true);
+        minesPlaced += 1;
+        Log::VERBOSE() << "[Board] Bomb planted at (" << y << ", " << x << ").";
+      }
     }
+
+    _totalMines += totalMines;
+    _normalFields -= totalMines;
+  }
+  else
+  {
+    Log::WARNING() << "[Board] Can not add " << totalMines <<
+        " mines to the board. There are " << (_width * _height) <<
+        " fields in total and " << _totalMines <<
+        " of them already contain mines.";
   }
 }
 
